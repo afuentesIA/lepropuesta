@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Send, MapPin, Mail, Phone, MessageSquare, Building2 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { supabase } from '../lib/supabase';
 import { Language } from '../hooks/useLanguage';
 import { translations } from '../i18n/translations';
 
@@ -66,18 +65,16 @@ export const ContactPage = ({ language }: ContactPageProps) => {
     setSubmitStatus('idle');
 
     try {
-      const { error } = await supabase.from('contact_submissions').insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          company: formData.company || null,
-          message: formData.message,
-          language: language,
-        },
-      ]);
-
-      if (error) throw error;
-
+      // En lugar de enviar a Supabase, puedes:
+      // 1. Enviar a un servicio de forms como Formspree
+      // 2. Usar EmailJS
+      // 3. O simplemente mostrar éxito (para demo)
+      
+      console.log('Form data:', formData); // Para debugging
+      
+      // Simular envío exitoso
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       setSubmitStatus('success');
       setFormData({ name: '', email: '', company: '', message: '' });
 
