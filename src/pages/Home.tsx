@@ -422,17 +422,29 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                 </div>
                 <div className="hero-cta flex flex-col sm:flex-row gap-5 pt-4">
                   <Link
-                    to="/solutions"
+                    to="/products"
                     className="inline-flex items-center justify-center gap-3 px-12 py-6 bg-gradient-to-r from-red-600 to-red-500 text-white text-lg font-semibold rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_rgba(220,38,38,0.4)] group"
                   >
                     <span>
                       {language === 'en'
-                        ? 'Request a Technical Consultation'
+                        ? 'Explore AI Camera'
                         : language === 'es'
-                        ? 'Solicitar Consulta Técnica'
-                        : 'Solicitar Consulta Técnica'}
+                        ? 'Explorar Cámara IA'
+                        : 'Explorar Câmera IA'}
                     </span>
                     <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                  <Link
+                    to="/about"
+                    className="inline-flex items-center justify-center gap-3 px-12 py-6 bg-transparent border-2 border-white/30 text-white text-lg font-semibold rounded-full hover:border-red-500 hover:bg-red-500/10 transition-all duration-500 group"
+                  >
+                    <span>
+                      {language === 'en'
+                        ? 'Learn More'
+                        : language === 'es'
+                        ? 'Saber Más'
+                        : 'Saiba Mais'}
+                    </span>
                   </Link>
                 </div>
               </div>
