@@ -22,6 +22,7 @@ export const AboutPage = ({ language }: AboutPageProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(false);
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -40,6 +41,17 @@ export const AboutPage = ({ language }: AboutPageProps) => {
       setIsMuted(!isMuted);
     }
   };
+
+  // Precargar la imagen del hero
+  useEffect(() => {
+    const img = new Image();
+    img.src = './img/about.png';
+    img.onload = () => setHeroImageLoaded(true);
+    img.onerror = () => {
+      console.log('Error loading hero image, usando fallback');
+      setHeroImageLoaded(true);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -267,7 +279,7 @@ export const AboutPage = ({ language }: AboutPageProps) => {
         ? 'Complete projects in under a third of the time required for manual welding.'
         : language === 'es'
         ? 'Complete proyectos en menos de un tercio del tiempo requerido para soldadura manual.'
-        : 'Conclua projetos em menos de um terço do tempo necessário para soldagem manual.',
+        : 'Conclua projetos em menos de um tercio do tempo necessário para soldagem manual.',
       metric: '300%',
       unit: 'Faster'
     },
@@ -297,26 +309,36 @@ export const AboutPage = ({ language }: AboutPageProps) => {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-white pt-20 overflow-hidden">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden bg-black">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('./img/HeroAbout1.webp')",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-red-900/60 via-black/80 to-black/95" />
-        
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-          <div className="text-center space-y-8">
-            <div className="hero-badge inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-              <Sparkles className="w-5 h-5 text-red-400" />
-              <span className="text-red-400 text-sm font-semibold tracking-wider uppercase">
-                {language === 'en' ? 'Advanced Welding Technology' : language === 'es' ? 'Tecnología de Soldadura Avanzada' : 'Tecnologia de Soldagem Avançada'}
-              </span>
-            </div>
+      {/* Hero Section - Versión corregida para iPhone */}
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative min-h-screen flex items-center overflow-hidden">
+        {/* Fondo con imagen - usando img en lugar de background-image para iOS */}
+        <div className="absolute inset-0" style={{ backgroundColor: '#1a1a1a' }}>
+          <img
+            src="./img/about.png"
+            alt=""
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+              heroImageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{
+              objectPosition: 'center',
+              filter: 'brightness(0.5)' // Para el efecto de overlay más oscuro
+            }}
+            onLoad={() => setHeroImageLoaded(true)}
+          />
+          {/* Overlay oscuro adicional */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80" />
+        </div>
 
-            <h1 className="hero-title text-6xl sm:text-7xl md:text-8xl font-bold text-white tracking-tight leading-none">
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <div className="hero-badge inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-8">
+            <Sparkles className="w-5 h-5 text-red-400" />
+            <span className="text-red-400 text-sm font-semibold tracking-wider uppercase">
+              {language === 'en' ? 'Advanced Welding Technology' : language === 'es' ? 'Tecnología de Soldadura Avanzada' : 'Tecnologia de Soldagem Avançada'}
+            </span>
+          </div>
+
+          <div className="hero-title">
+            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-none mb-6">
               {language === 'en' ? 'Industrial' : language === 'es' ? 'Industrial' : 'Industrial'}
               <br />
               <span className="bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
@@ -325,24 +347,26 @@ export const AboutPage = ({ language }: AboutPageProps) => {
               <br />
               {language === 'en' ? 'Revolution' : language === 'es' ? 'Revolución' : 'Revolução'}
             </h1>
+          </div>
 
-            <p className="hero-description text-xl sm:text-2xl md:text-3xl text-white/80 leading-relaxed font-light max-w-5xl mx-auto">
+          <div className="hero-description">
+            <p className="text-xl sm:text-2xl md:text-3xl text-white/80 leading-relaxed font-light max-w-5xl mx-auto mb-10">
               {language === 'en'
                 ? 'Transforming industrial welding with AI-powered precision and automation for the global energy sector.'
                 : language === 'es'
                 ? 'Transformando la soldadura industrial con precisión impulsada por IA y automatización para el sector energético global.'
                 : 'Transformando a soldagem industrial com precisão alimentada por IA e automação para o setor energético global.'}
             </p>
+          </div>
 
-            <div className="hero-cta flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
-              <a
-                href="#overview"
-                className="group inline-flex items-center justify-center gap-4 px-12 py-5 bg-gradient-to-r from-red-600 to-red-500 text-white text-lg font-semibold rounded-2xl hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/25 border border-red-400/20"
-              >
-                <span>{language === 'en' ? 'Explore Technology' : language === 'es' ? 'Explorar Tecnología' : 'Explorar Tecnologia'}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </a>
-            </div>
+          <div className="hero-cta">
+            <a
+              href="#overview"
+              className="group inline-flex items-center justify-center gap-4 px-12 py-5 bg-gradient-to-r from-red-600 to-red-500 text-white text-lg font-semibold rounded-2xl hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/25 border border-red-400/20"
+            >
+              <span>{language === 'en' ? 'Explore Technology' : language === 'es' ? 'Explorar Tecnología' : 'Explorar Tecnologia'}</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </a>
           </div>
         </div>
       </section>
@@ -395,6 +419,10 @@ export const AboutPage = ({ language }: AboutPageProps) => {
                     src={location.flag}
                     alt={`${location.title} flag`}
                     className="w-12 h-9 object-cover rounded-lg shadow-md border border-gray-200"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://via.placeholder.com/48x36/333333/ffffff?text=Flag';
+                    }}
                   />
                   <MapPin className="w-5 h-5 text-red-500" />
                 </div>

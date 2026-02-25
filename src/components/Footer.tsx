@@ -60,20 +60,20 @@ export const Footer = ({ language }: FooterProps) => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a 
-                  href="#" 
+                <Link 
+                  to="/privacy" 
                   className="text-gray-600 hover:text-red-600 transition-colors duration-300 text-lg"
                 >
                   {t.footer.privacy}
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="#" 
+                <Link 
+                  to="#" 
                   className="text-gray-600 hover:text-red-600 transition-colors duration-300 text-lg"
                 >
                   {t.footer.terms}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

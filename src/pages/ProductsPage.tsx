@@ -17,9 +17,10 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
   const pageRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [currentSlides, setCurrentSlides] = useState<number[]>([0, 0]);
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const products = [
     {
@@ -101,7 +102,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
             ? '10km range with 2km/h travel speed for flexible operation across large workspaces'
             : language === 'es'
             ? 'Alcance de 10km con velocidad de desplazamiento de 2km/h para operación flexible en grandes espacios de trabajo'
-            : 'Alcance de 10km com velocidade de deslocamento de 2km/h para operação flexível em grandes espaços de trabalho'
+            : 'Alcance de 10km com velocidade de deslocamento de 2km/h para operação flexível em grandes espaços de trabajo'
         }
       ],
       extendedSpecs: {
@@ -146,7 +147,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         ? 'Compact, powerful, and intelligent welding robot for tight spaces. Equipped with advanced AI, 3D vision technology, and pre-installed welding programs for precise automation without programming.'
         : language === 'es'
         ? 'Robot de soldadura compacto, potente e inteligente para espacios reducidos. Equipado con IA avanzada, tecnología de visión 3D y programas de soldadura preinstalados para automatización precisa sin programación.'
-        : 'Robô de soldagem compacto, potente e inteligente para espaços reduzidos. Equipado com IA avançada, tecnologia de visão 3D e programas de soldagem pré-instalados para automação precisa sem programação.',
+        : 'Robô de soldagem compacto, potente e inteligente para espacios reduzidos. Equipado com IA avançada, tecnologia de visão 3D e programas de soldagem pré-instalados para automação precisa sem programação.',
       specs: [
         {
           label: language === 'en' ? 'Total Power' : language === 'es' ? 'Potencia Total' : 'Potência Total',
@@ -233,7 +234,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
           { label: language === 'en' ? 'AI Processing' : language === 'es' ? 'Procesamiento IA' : 'Processamento IA', value: language === 'en' ? 'Real-time' : language === 'es' ? 'Tiempo real' : 'Tempo real' },
           { label: language === 'en' ? 'Pre-installed Programs' : language === 'es' ? 'Programas Preinstalados' : 'Programas Pré-instalados', value: language === 'en' ? 'Yes' : language === 'es' ? 'Sí' : 'Sim' },
         ],
-        [language === 'en' ? 'Robot Arm Specifications' : language === 'es' ? 'Especificaciones del Brazo Robótico' : 'Especificações do Braço Robótico']: [
+        [language === 'en' ? 'Robot Arm Specifications' : language === 'es' ? 'Especificaciones del Brazo Robótico' : 'Especificaciones do Braço Robótico']: [
           { label: language === 'en' ? 'Arm Range' : language === 'es' ? 'Alcance del Brazo' : 'Alcance do Braço', value: '2010mm' },
           { label: language === 'en' ? 'Repeatability' : language === 'es' ? 'Repetibilidad' : 'Repetibilidade', value: '±0.05mm' },
           { label: language === 'en' ? 'Payload Capacity' : language === 'es' ? 'Capacidad de Carga' : 'Capacidade de Carga', value: '20kg' },
@@ -253,55 +254,255 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
     }
   ];
 
-  // Animación del Hero separada
+  // Animación del Hero con secuencia de imágenes - VERSIÓN CORREGIDA
   useEffect(() => {
-    if (videoRef.current && heroRef.current) {
-      const video = videoRef.current;
-      const heroSection = heroRef.current;
+    if (!canvasRef.current || !heroRef.current) return;
 
-      // Pausar el video inicialmente y configurarlo
-      video.pause();
-      video.currentTime = 0;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const heroSection = heroRef.current;
 
-      // Crear un contenedor virtual para el scroll
-      const scrollDistance = window.innerHeight * 2; // 2 pantallas de scroll
+    if (!ctx) return;
 
-      const heroTimeline = gsap.timeline({
+    // Configuración de la secuencia de imágenes
+    const frameCount = 121; // 0-120 = 121 imágenes
+    const imagePath = '/img/secuencia/Agile Mover White_';
+    
+    console.log("Iniciando carga de secuencia de imágenes...");
+
+    const images: HTMLImageElement[] = new Array(frameCount);
+    let loadedCount = 0;
+    let animationInitialized = false;
+
+    // Configurar el tamaño del canvas para cubrir toda la pantalla
+    const setCanvasSize = () => {
+      // Usar dimensiones de la ventana para asegurar cobertura completa
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      console.log("Canvas size set to:", width, "x", height);
+    };
+    
+    // Inicializar tamaño
+    setCanvasSize();
+
+    const handleResize = () => {
+      setCanvasSize();
+      if (loadedCount > 0 && images[0]) {
+        renderFrame(0);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+
+    // Función para renderizar un frame específico
+    const renderFrame = (frameIndex: number) => {
+      if (!ctx || !canvas || canvas.width === 0 || canvas.height === 0) return;
+
+      const index = Math.min(frameCount - 1, Math.max(0, Math.floor(frameIndex)));
+      const img = images[index];
+
+      if (!img || !img.complete) {
+        console.warn(`Imagen ${index} no disponible para renderizar`);
+        return;
+      }
+
+      // Limpiar el canvas con color negro
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Calcular dimensiones para cubrir todo el área (cover)
+      const canvasRatio = canvas.width / canvas.height;
+      const imgRatio = img.width / img.height;
+
+      let drawWidth, drawHeight, offsetX, offsetY;
+
+      if (canvasRatio > imgRatio) {
+        // Canvas es más ancho que la imagen - cubrir ancho
+        drawWidth = canvas.width;
+        drawHeight = img.height * (canvas.width / img.width);
+        offsetX = 0;
+        offsetY = (canvas.height - drawHeight) / 2;
+      } else {
+        // Canvas es más alto que la imagen - cubrir altura
+        drawHeight = canvas.height;
+        drawWidth = img.width * (canvas.height / img.height);
+        offsetX = (canvas.width - drawWidth) / 2;
+        offsetY = 0;
+      }
+
+      // Dibujar la imagen cubriendo todo el área
+      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    };
+
+    // Precargar todas las imágenes
+    const loadImages = () => {
+      console.log("Iniciando precarga de imágenes...");
+      
+      for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        // Formatear el número con ceros a la izquierda
+        const frameNumber = i.toString().padStart(5, '0');
+        img.src = `${imagePath}${frameNumber}.png`;
+        
+        console.log(`Cargando imagen ${i}: ${img.src}`);
+
+        img.onload = () => {
+          loadedCount++;
+          images[i] = img;
+          
+          console.log(`Imagen ${i} cargada (${loadedCount}/${frameCount})`);
+          
+          // Renderizar el primer frame cuando esté cargado
+          if (i === 0) {
+            renderFrame(0);
+          }
+          
+          // Cuando todas las imágenes estén cargadas
+          if (loadedCount === frameCount && !animationInitialized) {
+            console.log("Todas las imágenes cargadas. Configurando animación...");
+            setImagesLoaded(true);
+            setupScrollAnimation();
+          }
+        };
+
+        img.onerror = () => {
+          console.error(`Error cargando imagen ${i}: ${img.src}`);
+          loadedCount++;
+          
+          // Crear una imagen de placeholder
+          const placeholder = new Image();
+          placeholder.onload = () => {
+            images[i] = placeholder;
+            if (loadedCount === frameCount && !animationInitialized) {
+              console.log("Todas las imágenes procesadas. Configurando animación...");
+              setImagesLoaded(true);
+              setupScrollAnimation();
+            }
+          };
+          
+          // Generar un placeholder SVG
+          const svgText = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
+            <rect width="100%" height="100%" fill="#1a1a1a"/>
+            <rect x="100" y="100" width="1720" height="880" fill="#333" rx="20"/>
+            <text x="960" y="540" font-family="Arial" font-size="48" fill="#fff" text-anchor="middle" dy=".3em">Frame ${i}</text>
+            <text x="960" y="620" font-family="Arial" font-size="24" fill="#999" text-anchor="middle">${img.src}</text>
+          </svg>`;
+          
+          placeholder.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+        };
+      }
+    };
+
+    // Configurar la animación controlada por scroll
+    const setupScrollAnimation = () => {
+      if (animationInitialized) return;
+      animationInitialized = true;
+      
+      console.log("Configurando ScrollTrigger...");
+
+      // Limpiar cualquier ScrollTrigger existente
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === heroSection || trigger.vars?.trigger === heroSection) {
+          console.log("Matando ScrollTrigger anterior");
+          trigger.kill();
+        }
+      });
+
+      // Crear timeline de GSAP con ScrollTrigger
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
-          end: `+=${scrollDistance}`,
+          end: () => `+=${window.innerHeight * 1.5}`,
+          scrub: true,
           pin: true,
-          scrub: 0.5,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
-            if (video.readyState >= 2) {
-              // Mapear el progreso del scroll (0-1) al tiempo del video (0-duration)
-              const progress = self.progress;
-              const videoDuration = video.duration;
-              video.currentTime = progress * videoDuration;
-            }
+            const progress = self.progress;
+            const targetFrame = progress * (frameCount - 1);
+            renderFrame(targetFrame);
           },
+          onEnter: () => {
+            console.log("ScrollTrigger: Entrando en la sección hero");
+            renderFrame(0);
+          },
+          onEnterBack: () => {
+            console.log("ScrollTrigger: Volviendo a la sección hero");
+            renderFrame(frameCount - 1);
+          },
+          onLeave: () => {
+            console.log("ScrollTrigger: Saliendo de la sección hero");
+          },
+          onRefresh: () => {
+            console.log("ScrollTrigger: Refrescando");
+            setCanvasSize();
+            if (images[0]) {
+              renderFrame(0);
+            }
+          }
         },
+        defaults: {
+          ease: 'none'
+        }
       });
 
-      // Asegurarse de que el video esté listo
-      const handleLoadedData = () => {
-        video.currentTime = 0;
-      };
+      // Animación dummy para la timeline
+      tl.to({}, {
+        duration: 1,
+        onComplete: () => {
+          console.log("Animación de scroll configurada correctamente");
+        }
+      });
 
-      video.addEventListener('loadeddata', handleLoadedData);
+      console.log("ScrollTrigger configurado exitosamente");
+    };
 
-      return () => {
-        video.removeEventListener('loadeddata', handleLoadedData);
-        heroTimeline.scrollTrigger?.kill();
-      };
-    }
+    // Iniciar la precarga de imágenes
+    loadImages();
+
+    // Forzar un refresh de ScrollTrigger
+    const refreshTimer = setTimeout(() => {
+      if (ScrollTrigger) {
+        ScrollTrigger.refresh();
+        console.log("ScrollTrigger refrescado");
+      }
+    }, 1000);
+
+    // Cleanup al desmontar el componente
+    return () => {
+      console.log("Limpiando animación...");
+      clearTimeout(refreshTimer);
+      window.removeEventListener('resize', handleResize);
+      
+      // Matar todos los ScrollTriggers
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === heroSection || trigger.vars?.trigger === heroSection) {
+          console.log("Limpiando ScrollTrigger");
+          trigger.kill();
+        }
+      });
+      
+      // Limpiar el canvas
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    };
   }, []);
 
-  // Animaciones del contenido (separadas del hero)
+  // Animaciones del contenido
   useEffect(() => {
+    if (!imagesLoaded) return;
+    
+    console.log("Configurando animaciones del contenido...");
+    
     const ctx = gsap.context(() => {
-      // Animación más rápida para las especificaciones técnicas
+      // Animación para las especificaciones técnicas
       gsap.utils.toArray('.spec-card').forEach((card, index) => {
         gsap.from(card as Element, {
           scrollTrigger: {
@@ -317,7 +518,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         });
       });
 
-      // Animaciones más rápidas para las secciones
+      // Animaciones para las secciones
       gsap.utils.toArray('.product-section').forEach((section, index) => {
         gsap.from(section as Element, {
           scrollTrigger: {
@@ -350,8 +551,11 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
       });
     }, contentRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      console.log("Limpiando animaciones del contenido");
+      ctx.revert();
+    };
+  }, [imagesLoaded]);
 
   const nextSlide = (productIndex: number) => {
     setCurrentSlides(prev => {
@@ -374,7 +578,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
     const intervals = products.map((_, index) => {
       return setInterval(() => {
         nextSlide(index);
-      }, 4000); // Cambia cada 4 segundos
+      }, 4000);
     });
 
     return () => intervals.forEach(interval => clearInterval(interval));
@@ -382,26 +586,31 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-black">
-      {/* Hero Section con video controlado por scroll */}
-      <section ref={heroRef} className="relative h-screen w-full overflow-hidden bg-black">
-        <div className="absolute inset-0 h-screen w-full overflow-hidden">
+      {/* Hero Section con secuencia de imágenes controlada por scroll */}
+      <section 
+        ref={heroRef} 
+        className="relative w-screen h-screen overflow-hidden bg-black"
+        style={{ minHeight: '100vh' }}
+      >
+        <div className="absolute inset-0 w-screen h-screen overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
-            <video
-              ref={videoRef}
-              muted
-              playsInline
-              preload="auto"
-              className="w-full h-full object-cover"
-            >
-              <source
-                src="./vid/Agile_Move_ White.webm"                
-                type="video/webm"
-              />
-            </video>
+            <canvas
+              ref={canvasRef}
+              className="absolute top-0 left-0 w-screen h-screen"
+              style={{ display: 'block' }}
+            />
+            {!imagesLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black">
+                <div className="text-center">
+                  <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-white text-lg">Cargando secuencia de imágenes...</p>
+                </div>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
           </div>
 
-          <div className="relative z-10 h-full flex items-center">
+          <div className="relative z-10 h-full flex items-center justify-center">
             <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full text-center">
               <div className="mb-6">
                 <span className="text-red-400 text-xl font-semibold tracking-wide uppercase">
@@ -421,16 +630,30 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
               <a
                 href="#products"
                 className="inline-flex items-center justify-center gap-3 px-12 py-6 bg-gradient-to-r from-red-600 to-red-500 text-white text-xl font-semibold rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-105 hover:shadow-[0_30px_80px_rgba(220,38,38,0.4)]"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
                 {language === 'en' ? 'Explore Products' : language === 'es' ? 'Explorar Productos' : 'Explorar Produtos'}
                 <ChevronRight className="w-6 h-6" />
               </a>
+              
+              {/* Indicador de scroll */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <div className="flex flex-col items-center">
+                  <span className="text-white/60 text-sm mb-2">Scroll down</span>
+                  <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center">
+                    <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-bounce"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contenido principal con sus propias animaciones */}
+      {/* Contenido principal */}
       <div ref={contentRef} id="products" className="bg-white pt-20">
         {products.map((product, productIndex) => (
           <section
@@ -539,7 +762,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
                       ))}
                     </div>
 
-                    {/* Flechas de navegación en los bordes (solo aparecen en hover) */}
+                    {/* Flechas de navegación */}
                     <div className="absolute inset-0 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <button
                         onClick={() => prevSlide(productIndex)}
@@ -648,7 +871,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
               ? 'Contact our team to learn how our AI welding robots can revolutionize your manufacturing process'
               : language === 'es'
               ? 'Contacte a nuestro equipo para descubrir cómo nuestros robots de soldadura con IA pueden revolucionar su proceso de fabricación'
-              : 'Entre em contato com nossa equipe para descobrir como nossos robôs de soldagem com IA podem revolucionar seu processo de fabricação'}
+              : 'Entre em contato com nossa equipe para descobrir como nossos robôs de soldagem com IA podem revolucionar seu processo de fabricación'}
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <a
