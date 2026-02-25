@@ -254,7 +254,57 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
     }
   ];
 
-  // Animación del Hero con secuencia de imágenes - VERSIÓN CORREGIDA
+  const roboticStations = [
+    {
+      id: 'track-type',
+      name: language === 'en' ? 'Track Type' : language === 'es' ? 'Tipo Pista' : 'Tipo Pista',
+      model: 'TrackWeld Station',
+      specs: 'ServoAxis',
+      description: language === 'en'
+        ? 'Precision track-based welding station with servo axis control for consistent, high-quality welds on long structures and assemblies.'
+        : language === 'es'
+        ? 'Estación de soldadura de precisión basada en pista con control de eje servo para soldaduras consistentes y de alta calidad en estructuras y ensamblajes largos.'
+        : 'Estação de soldagem de precisão baseada em trilho com controle de eixo servo para soldas consistentes e de alta qualidade em estruturas e montagens longas.',
+      image: './img/track_type.webp'
+    },
+    {
+      id: 'track-cantilever',
+      name: language === 'en' ? 'Track Cantilever Type' : language === 'es' ? 'Tipo Pista Voladiza' : 'Tipo Trilho em Balanço',
+      model: 'CantileverWeld',
+      specs: 'NinAxis',
+      description: language === 'en'
+        ? 'Versatile cantilever design with nine-axis control provides exceptional reach and flexibility for complex welding applications.'
+        : language === 'es'
+        ? 'Diseño voladizo versátil con control de nueve ejes proporciona alcance excepcional y flexibilidad para aplicaciones de soldadura complejas.'
+        : 'Design em balanço versátil com controle de nove eixos proporciona alcance excepcional e flexibilidade para aplicações complexas de soldagem.',
+      image: './img/cantilever.png'
+    },
+    {
+      id: 'gantry-type',
+      name: language === 'en' ? 'Gantry Type' : language === 'es' ? 'Tipo Pórtico' : 'Tipo Pórtico',
+      model: 'GantryRail DualWeld Station',
+      specs: language === 'en' ? 'Dual Welding' : language === 'es' ? 'Soldadura Dual' : 'Soldagem Dupla',
+      description: language === 'en'
+        ? 'Heavy-duty gantry system with dual welding capability for large-scale industrial projects requiring maximum coverage and productivity.'
+        : language === 'es'
+        ? 'Sistema de pórtico de servicio pesado con capacidad de soldadura dual para proyectos industriales a gran escala que requieren máxima cobertura y productividad.'
+        : 'Sistema de pórtico de serviço pesado com capacidade de soldagem dupla para projetos industriais de grande escala que requerem máxima cobertura e produtividade.',
+      image: './img/gantry.png'
+    },
+    {
+      id: 'cell-fabrication',
+      name: language === 'en' ? 'Cell Fabrication' : language === 'es' ? 'Fabricación de Celdas' : 'Fabricação de Células',
+      model: language === 'en' ? 'Custom Welding Cells' : language === 'es' ? 'Celdas de Soldadura Personalizadas' : 'Células de Soldagem Personalizadas',
+      specs: language === 'en' ? 'Fully Integrated' : language === 'es' ? 'Totalmente Integrado' : 'Totalmente Integrado',
+      description: language === 'en'
+        ? 'Complete turn-key welding cell solutions designed and fabricated to your specific production requirements with full integration and automation.'
+        : language === 'es'
+        ? 'Soluciones completas llave en mano de celdas de soldadura diseñadas y fabricadas según sus requisitos de producción específicos con integración y automatización completas.'
+        : 'Soluções completas de células de soldagem chave na mão projetadas e fabricadas de acordo com seus requisitos específicos de produção com integração e automação completas.',
+      image: './img/stations/cell-fabrication.png'
+    }
+  ];
+
   useEffect(() => {
     if (!canvasRef.current || !heroRef.current) return;
 
@@ -264,29 +314,25 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
 
     if (!ctx) return;
 
-    // Configuración de la secuencia de imágenes
-    const frameCount = 121; // 0-120 = 121 imágenes
+    const frameCount = 121;
     const imagePath = '/img/secuencia/Agile Mover White_';
-    
+
     console.log("Iniciando carga de secuencia de imágenes...");
 
     const images: HTMLImageElement[] = new Array(frameCount);
     let loadedCount = 0;
     let animationInitialized = false;
 
-    // Configurar el tamaño del canvas para cubrir toda la pantalla
     const setCanvasSize = () => {
-      // Usar dimensiones de la ventana para asegurar cobertura completa
       const width = window.innerWidth;
       const height = window.innerHeight;
-      
+
       canvas.width = width;
       canvas.height = height;
-      
+
       console.log("Canvas size set to:", width, "x", height);
     };
-    
-    // Inicializar tamaño
+
     setCanvasSize();
 
     const handleResize = () => {
@@ -295,10 +341,9 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         renderFrame(0);
       }
     };
-    
+
     window.addEventListener('resize', handleResize);
 
-    // Función para renderizar un frame específico
     const renderFrame = (frameIndex: number) => {
       if (!ctx || !canvas || canvas.width === 0 || canvas.height === 0) return;
 
@@ -310,58 +355,49 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         return;
       }
 
-      // Limpiar el canvas con color negro
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Calcular dimensiones para cubrir todo el área (cover)
       const canvasRatio = canvas.width / canvas.height;
       const imgRatio = img.width / img.height;
 
       let drawWidth, drawHeight, offsetX, offsetY;
 
       if (canvasRatio > imgRatio) {
-        // Canvas es más ancho que la imagen - cubrir ancho
         drawWidth = canvas.width;
         drawHeight = img.height * (canvas.width / img.width);
         offsetX = 0;
         offsetY = (canvas.height - drawHeight) / 2;
       } else {
-        // Canvas es más alto que la imagen - cubrir altura
         drawHeight = canvas.height;
         drawWidth = img.width * (canvas.height / img.height);
         offsetX = (canvas.width - drawWidth) / 2;
         offsetY = 0;
       }
 
-      // Dibujar la imagen cubriendo todo el área
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
-    // Precargar todas las imágenes
     const loadImages = () => {
       console.log("Iniciando precarga de imágenes...");
-      
+
       for (let i = 0; i < frameCount; i++) {
         const img = new Image();
-        // Formatear el número con ceros a la izquierda
         const frameNumber = i.toString().padStart(5, '0');
         img.src = `${imagePath}${frameNumber}.png`;
-        
+
         console.log(`Cargando imagen ${i}: ${img.src}`);
 
         img.onload = () => {
           loadedCount++;
           images[i] = img;
-          
+
           console.log(`Imagen ${i} cargada (${loadedCount}/${frameCount})`);
-          
-          // Renderizar el primer frame cuando esté cargado
+
           if (i === 0) {
             renderFrame(0);
           }
-          
-          // Cuando todas las imágenes estén cargadas
+
           if (loadedCount === frameCount && !animationInitialized) {
             console.log("Todas las imágenes cargadas. Configurando animación...");
             setImagesLoaded(true);
@@ -372,8 +408,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         img.onerror = () => {
           console.error(`Error cargando imagen ${i}: ${img.src}`);
           loadedCount++;
-          
-          // Crear una imagen de placeholder
+
           const placeholder = new Image();
           placeholder.onload = () => {
             images[i] = placeholder;
@@ -383,28 +418,25 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
               setupScrollAnimation();
             }
           };
-          
-          // Generar un placeholder SVG
+
           const svgText = `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
             <rect width="100%" height="100%" fill="#1a1a1a"/>
             <rect x="100" y="100" width="1720" height="880" fill="#333" rx="20"/>
             <text x="960" y="540" font-family="Arial" font-size="48" fill="#fff" text-anchor="middle" dy=".3em">Frame ${i}</text>
             <text x="960" y="620" font-family="Arial" font-size="24" fill="#999" text-anchor="middle">${img.src}</text>
           </svg>`;
-          
+
           placeholder.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
         };
       }
     };
 
-    // Configurar la animación controlada por scroll
     const setupScrollAnimation = () => {
       if (animationInitialized) return;
       animationInitialized = true;
-      
+
       console.log("Configurando ScrollTrigger...");
 
-      // Limpiar cualquier ScrollTrigger existente
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === heroSection || trigger.vars?.trigger === heroSection) {
           console.log("Matando ScrollTrigger anterior");
@@ -412,7 +444,6 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         }
       });
 
-      // Crear timeline de GSAP con ScrollTrigger
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: heroSection,
@@ -452,7 +483,6 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         }
       });
 
-      // Animación dummy para la timeline
       tl.to({}, {
         duration: 1,
         onComplete: () => {
@@ -463,10 +493,8 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
       console.log("ScrollTrigger configurado exitosamente");
     };
 
-    // Iniciar la precarga de imágenes
     loadImages();
 
-    // Forzar un refresh de ScrollTrigger
     const refreshTimer = setTimeout(() => {
       if (ScrollTrigger) {
         ScrollTrigger.refresh();
@@ -474,35 +502,30 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
       }
     }, 1000);
 
-    // Cleanup al desmontar el componente
     return () => {
       console.log("Limpiando animación...");
       clearTimeout(refreshTimer);
       window.removeEventListener('resize', handleResize);
-      
-      // Matar todos los ScrollTriggers
+
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === heroSection || trigger.vars?.trigger === heroSection) {
           console.log("Limpiando ScrollTrigger");
           trigger.kill();
         }
       });
-      
-      // Limpiar el canvas
+
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     };
   }, []);
 
-  // Animaciones del contenido
   useEffect(() => {
     if (!imagesLoaded) return;
-    
+
     console.log("Configurando animaciones del contenido...");
-    
+
     const ctx = gsap.context(() => {
-      // Animación para las especificaciones técnicas
       gsap.utils.toArray('.spec-card').forEach((card, index) => {
         gsap.from(card as Element, {
           scrollTrigger: {
@@ -518,7 +541,6 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         });
       });
 
-      // Animaciones para las secciones
       gsap.utils.toArray('.product-section').forEach((section, index) => {
         gsap.from(section as Element, {
           scrollTrigger: {
@@ -549,6 +571,22 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
           ease: 'power2.out'
         });
       });
+
+      gsap.utils.toArray('.station-card').forEach((card, index) => {
+        gsap.from(card as Element, {
+          scrollTrigger: {
+            trigger: card as Element,
+            start: 'top 90%',
+            end: 'top 40%',
+            scrub: 0.6,
+          },
+          y: 60,
+          opacity: 0,
+          scale: 0.95,
+          duration: 1,
+          ease: 'power2.out'
+        });
+      });
     }, contentRef);
 
     return () => {
@@ -573,7 +611,6 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
     });
   };
 
-  // Auto-rotate slides
   useEffect(() => {
     const intervals = products.map((_, index) => {
       return setInterval(() => {
@@ -586,9 +623,8 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-black">
-      {/* Hero Section con secuencia de imágenes controlada por scroll */}
-      <section 
-        ref={heroRef} 
+      <section
+        ref={heroRef}
         className="relative w-screen h-screen overflow-hidden bg-black"
         style={{ minHeight: '100vh' }}
       >
@@ -638,8 +674,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
                 {language === 'en' ? 'Explore Products' : language === 'es' ? 'Explorar Productos' : 'Explorar Produtos'}
                 <ChevronRight className="w-6 h-6" />
               </a>
-              
-              {/* Indicador de scroll */}
+
               <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
                 <div className="flex flex-col items-center">
                   <span className="text-white/60 text-sm mb-2">Scroll down</span>
@@ -653,7 +688,6 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
         </div>
       </section>
 
-      {/* Contenido principal */}
       <div ref={contentRef} id="products" className="bg-white pt-20">
         {products.map((product, productIndex) => (
           <section
@@ -704,7 +738,6 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
                 </div>
                 <div className={productIndex % 2 === 1 ? 'lg:order-1' : ''}>
                   <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
-                    {/* Carrusel de imágenes */}
                     <div className="relative w-full h-full">
                       {product.images.map((image, index) => (
                         <div
@@ -725,8 +758,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
                         </div>
                       ))}
                     </div>
-                    
-                    {/* Indicadores mejorados */}
+
                     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
                       {product.images.map((_, index) => (
                         <button
@@ -751,8 +783,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
                               ? 'bg-gray-300 hover:bg-gray-400'
                               : 'bg-white/30 hover:bg-white/50'
                           }`} />
-                          
-                          {/* Efecto de pulso para el indicador activo */}
+
                           {index === currentSlides[productIndex] && (
                             <div className={`absolute inset-0 rounded-full animate-ping ${
                               productIndex % 2 === 0 ? 'bg-red-600' : 'bg-red-400'
@@ -762,35 +793,34 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
                       ))}
                     </div>
 
-                    {/* Flechas de navegación */}
                     <div className="absolute inset-0 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <button
                         onClick={() => prevSlide(productIndex)}
                         className="w-1/4 h-full flex items-center justify-start pl-6 hover:bg-gradient-to-r from-black/10 to-transparent transition-all duration-300"
                       >
                         <div className={`w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 ${
-                          productIndex % 2 === 0 
-                            ? 'bg-white/80 text-black hover:bg-white' 
+                          productIndex % 2 === 0
+                            ? 'bg-white/80 text-black hover:bg-white'
                             : 'bg-black/80 text-white hover:bg-black'
                         }`}>
                           <ChevronLeft className="w-6 h-6" />
                         </div>
                       </button>
-                      
+
                       <button
                         onClick={() => nextSlide(productIndex)}
                         className="w-1/4 h-full flex items-center justify-end pr-6 hover:bg-gradient-to-l from-black/10 to-transparent transition-all duration-300"
                       >
                         <div className={`w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 ${
-                          productIndex % 2 === 0 
-                            ? 'bg-white/80 text-black hover:bg-white' 
+                          productIndex % 2 === 0
+                            ? 'bg-white/80 text-black hover:bg-white'
                             : 'bg-black/80 text-white hover:bg-black'
                         }`}>
                           <ChevronRight className="w-6 h-6" />
                         </div>
                       </button>
                     </div>
-                    
+
                     <div className="absolute inset-0 bg-gradient-to-t from-red-600/10 via-transparent to-transparent" />
                   </div>
                 </div>
@@ -859,6 +889,101 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
             </div>
           </section>
         ))}
+
+        <section className="py-32 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]" />
+
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <div className="text-center mb-20">
+              <div className="inline-block mb-6">
+                <span className="text-red-400 text-xl font-semibold tracking-wide uppercase">
+                  {language === 'en' ? 'Robotic Welding Stations' : language === 'es' ? 'Estaciones Robóticas de Soldadura' : 'Estações Robóticas de Soldagem'}
+                </span>
+              </div>
+              <h2 className="text-6xl sm:text-7xl md:text-8xl font-bold text-white mb-10 tracking-tight">
+                {language === 'en' ? 'Complete Solutions' : language === 'es' ? 'Soluciones Completas' : 'Soluções Completas'}
+              </h2>
+              <p className="text-2xl sm:text-3xl text-white/80 leading-relaxed font-light max-w-4xl mx-auto">
+                {language === 'en'
+                  ? 'Customized robotic welding stations and fabrication cells designed for your specific production needs'
+                  : language === 'es'
+                  ? 'Estaciones robóticas de soldadura y celdas de fabricación personalizadas diseñadas para sus necesidades específicas de producción'
+                  : 'Estações robóticas de soldagem e células de fabricação personalizadas projetadas para suas necessidades específicas de produção'}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-10">
+              {roboticStations.map((station, index) => (
+                <div
+                  key={station.id}
+                  className="station-card group relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-red-500/50 transition-all duration-700 hover:scale-[1.02]"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                  <div className="relative p-10 space-y-8">
+                    <div className="space-y-3">
+                      <div className="inline-flex items-center gap-3 px-5 py-2 bg-red-600/20 rounded-full border border-red-500/30">
+                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                        <span className="text-red-400 text-sm font-semibold uppercase tracking-wider">
+                          {station.name}
+                        </span>
+                      </div>
+                      <h3 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
+                        {station.model}
+                      </h3>
+                    </div>
+
+                    <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 rounded-2xl border border-white/10">
+                      <Cpu className="w-5 h-5 text-red-400" />
+                      <span className="text-white/90 text-lg font-medium">
+                        {station.specs}
+                      </span>
+                    </div>
+
+                    <p className="text-xl text-white/70 leading-relaxed">
+                      {station.description}
+                    </p>
+
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  </div>
+
+                  <div className="relative h-80 bg-gradient-to-b from-transparent to-black/50 overflow-hidden">
+                    <img
+                      src={station.image}
+                      alt={station.model}
+                      className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+                          `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+                            <rect width="400" height="300" fill="#1a1a1a"/>
+                            <rect x="50" y="50" width="300" height="200" fill="#333" rx="10"/>
+                            <text x="200" y="170" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">${station.model}</text>
+                            <text x="200" y="210" font-family="Arial" font-size="16" fill="#999" text-anchor="middle">Imagen no disponible</text>
+                          </svg>`
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-20 text-center">
+              <div className="inline-flex flex-col sm:flex-row gap-6 items-center justify-center">
+                <a
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-3 px-12 py-6 bg-gradient-to-r from-red-600 to-red-500 text-white text-xl font-semibold rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-105 hover:shadow-[0_30px_80px_rgba(220,38,38,0.4)] group"
+                >
+                  <span>
+                    {language === 'en' ? 'Request Custom Solution' : language === 'es' ? 'Solicitar Solución Personalizada' : 'Solicitar Solução Personalizada'}
+                  </span>
+                  <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <section className="py-40 bg-white">
