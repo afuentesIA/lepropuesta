@@ -20,7 +20,6 @@ export const CategoryCard = ({ category, language, isActive, onClick }: Category
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
-    // Preload images
     const loadedStates = category.images.map(() => false);
     setImagesLoaded(loadedStates);
 
@@ -52,13 +51,26 @@ export const CategoryCard = ({ category, language, isActive, onClick }: Category
   const getCategoryIcon = () => {
     switch(category.id) {
       case 'mobile-welding':
-        return <Zap className="w-6 h-6" />;
+        return <Zap className="w-5 h-5" />;
       case 'robotic-stations':
-        return <Shield className="w-6 h-6" />;
+        return <Shield className="w-5 h-5" />;
       case 'custom-cells':
-        return <Sparkles className="w-6 h-6" />;
+        return <Sparkles className="w-5 h-5" />;
       default:
         return null;
+    }
+  };
+
+  const getCategoryBadge = () => {
+    switch(category.id) {
+      case 'mobile-welding':
+        return 'MOBILE';
+      case 'robotic-stations':
+        return 'STATION';
+      case 'custom-cells':
+        return 'CUSTOM';
+      default:
+        return '';
     }
   };
 
@@ -68,19 +80,28 @@ export const CategoryCard = ({ category, language, isActive, onClick }: Category
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`group relative h-[650px] rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ${
+      className={`group relative h-[620px] rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ${
         isActive 
-          ? 'ring-4 ring-red-500 ring-offset-4 ring-offset-black scale-[1.02] shadow-2xl shadow-red-500/20' 
-          : 'hover:scale-[1.02] hover:shadow-2xl hover:shadow-red-500/10'
+          ? 'ring-4 ring-red-500 ring-offset-4 ring-offset-white scale-[1.02] shadow-2xl shadow-red-500/20' 
+          : 'hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/10'
       }`}
     >
-      {/* Background Image Container - AJUSTADO: imágenes más grandes y más arriba */}
-      <div className="absolute inset-0 flex items-start justify-center pt-24 bg-gradient-to-br from-gray-900 to-black">
+      {/* Fondo hueso para las tarjetas */}
+      <div className="absolute inset-0 bg-gradient-to-br from-stone-100 via-stone-50 to-stone-100">
+        {/* Patrón de textura sutil */}
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
+
+      {/* Imagen con contenedor - posición ajustada */}
+      <div className="absolute inset-0 flex items-start justify-center pt-24">
         {category.images.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 flex items-start justify-center pt-24 transition-all duration-1500 ${
-              index === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
+            className={`absolute inset-0 flex items-start justify-center pt-24 transition-all duration-1000 ${
+              index === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           >
             {imagesLoaded[index] && (
@@ -88,13 +109,13 @@ export const CategoryCard = ({ category, language, isActive, onClick }: Category
                 <img
                   src={image}
                   alt={`${category.title[language]} ${index + 1}`}
-                  className="max-w-[92%] max-h-[75%] w-auto h-auto object-contain"
+                  className="max-w-[75%] max-h-[45%] w-auto h-auto object-contain mt-2"
                   style={{
-                    filter: 'drop-shadow(0 25px 35px rgba(0, 0, 0, 0.6))'
+                    filter: 'drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15))'
                   }}
                 />
-                {/* Overlay de color para mejorar contraste */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
+                {/* Overlay gradiente suave hacia abajo - más sutil */}
+                <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-stone-100 via-stone-100/70 to-transparent pointer-events-none" />
               </>
             )}
           </div>
@@ -103,108 +124,97 @@ export const CategoryCard = ({ category, language, isActive, onClick }: Category
       
       {/* Efectos visuales modernos */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Gradiente principal */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90" />
-        
-        {/* Efecto de brillo en los bordes */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
-        
-        {/* Patrón geométrico sutil */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0)`,
-            backgroundSize: '30px 30px'
-          }} />
-        </div>
+        {/* Borde superior con brillo rojo */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-400/50 to-transparent" />
         
         {/* Efecto de deslumbramiento en hover */}
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transition-transform duration-1000 ${
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-red-500/5 to-transparent -skew-x-12 transition-transform duration-700 ${
           hovered ? 'translate-x-full' : '-translate-x-full'
         }`} />
       </div>
 
-      {/* Badge superior con icono */}
-      <div className="absolute top-6 left-6 z-10">
-        <div className="flex items-center gap-3 px-4 py-2 bg-black/40 backdrop-blur-xl rounded-full border border-white/10">
-          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          <span className="text-red-400 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
+      {/* Badge superior con icono - estilo rojo */}
+      <div className="absolute top-5 left-5 z-10">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-red-500 rounded-full shadow-md shadow-red-500/20">
+          <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
             {getCategoryIcon()}
-            {category.id === 'mobile-welding' && (language === 'en' ? 'MOBILE SERIES' : language === 'es' ? 'SERIE MÓVIL' : 'SÉRIE MÓVEL')}
-            {category.id === 'robotic-stations' && (language === 'en' ? 'STATION SERIES' : language === 'es' ? 'SERIE ESTACIONES' : 'SÉRIE ESTAÇÕES')}
-            {category.id === 'custom-cells' && (language === 'en' ? 'CUSTOM SERIES' : language === 'es' ? 'SERIE PERSONALIZADA' : 'SÉRIE PERSONALIZADA')}
+            {getCategoryBadge()} SERIES
           </span>
         </div>
       </div>
 
-      {/* Image Counter - Modernizado */}
-      <div className="absolute top-6 right-6 z-10 px-3 py-1.5 bg-black/40 backdrop-blur-xl rounded-full border border-white/10 text-white/80 text-sm font-medium">
-        <span className="text-red-400">{currentImageIndex + 1}</span> / {category.images.length}
+      {/* Image Counter - estilo hueso con borde */}
+      <div className="absolute top-5 right-5 z-10 px-2.5 py-1 bg-stone-200/80 backdrop-blur-sm rounded-full border border-stone-300 shadow-sm">
+        <span className="text-stone-700 text-xs font-medium">
+          <span className="text-red-600 font-semibold">{currentImageIndex + 1}</span> / {category.images.length}
+        </span>
       </div>
 
-      {/* Content - Rediseñado */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 z-10 transform transition-all duration-700">
+      {/* Content - Ahora con más espacio arriba */}
+      <div className="absolute bottom-0 left-0 right-0 p-7 z-10 bg-gradient-to-t from-stone-100 via-stone-100/95 to-transparent pt-12">
         {/* Título principal */}
-        <h3 className="text-5xl font-bold text-white mb-4 tracking-tight leading-tight">
-          {category.title[language]}
+        <h3 className="text-4xl font-bold tracking-tight leading-tight mb-2">
+          <span className="text-black">{category.title[language]}</span>
         </h3>
 
-        {/* Descripción con efecto de gradiente */}
-        <p className="text-lg text-white/90 leading-relaxed mb-6 max-w-md font-light">
+        {/* Descripción */}
+        <p className="text-sm text-stone-600 leading-relaxed mb-5 max-w-md font-light">
           {category.description[language]}
         </p>
 
-        {/* Features tags */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        {/* Features tags - estilo rojo sutil */}
+        <div className="flex flex-wrap gap-2 mb-6">
           {category.id === 'mobile-welding' && (
             <>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">AI-POWERED</span>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">MOBILE</span>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">AUTOMATION</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">AI-POWERED</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">MOBILE</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">AUTOMATION</span>
             </>
           )}
           {category.id === 'robotic-stations' && (
             <>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">TURN-KEY</span>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">PRECISION</span>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">INDUSTRIAL</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">TURN-KEY</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">PRECISION</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">INDUSTRIAL</span>
             </>
           )}
           {category.id === 'custom-cells' && (
             <>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">BESPOKE</span>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">FLEXIBLE</span>
-              <span className="px-3 py-1 bg-red-500/10 backdrop-blur-sm rounded-full text-red-400 text-xs font-semibold border border-red-500/20">CUSTOM</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">BESPOKE</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">FLEXIBLE</span>
+              <span className="px-2.5 py-1 bg-red-50 rounded-full text-red-700 text-[11px] font-medium border border-red-200">CUSTOM</span>
             </>
           )}
         </div>
 
-        {/* Explore Button - Rediseñado */}
-        <div className="flex items-center gap-3 group/btn">
-          <div className={`w-12 h-12 rounded-full bg-red-600 flex items-center justify-center transition-all duration-500 ${
-            hovered ? 'scale-110 bg-red-500' : ''
+        {/* Explore Button - estilo rojo */}
+        <div className="flex items-center gap-2 group/btn">
+          <div className={`w-8 h-8 rounded-full bg-red-600 flex items-center justify-center transition-all duration-300 ${
+            hovered ? 'scale-110 bg-red-500 shadow-lg shadow-red-500/30' : ''
           }`}>
-            <ChevronRight className={`w-6 h-6 text-white transition-transform duration-500 ${
-              hovered ? 'translate-x-1' : ''
+            <ChevronRight className={`w-4 h-4 text-white transition-transform duration-300 ${
+              hovered ? 'translate-x-0.5' : ''
             }`} />
           </div>
-          <span className="text-white/80 font-semibold tracking-wider text-sm uppercase group-hover/btn:text-red-400 transition-colors">
-            {language === 'en' ? 'Explore Solution' : language === 'es' ? 'Explorar Solución' : 'Explorar Solução'}
+          <span className="text-stone-500 text-xs font-medium tracking-wide uppercase group-hover/btn:text-red-600 transition-colors">
+            EXPLORE SOLUTION
           </span>
         </div>
       </div>
 
-      {/* Active Indicator - Modernizado */}
+      {/* Active Indicator - rojo vibrante */}
       {isActive && (
-        <div className="absolute top-6 right-24 z-10">
-          <div className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-full shadow-lg shadow-red-600/30 border border-red-400/20">
-            <div className="w-2 h-2 bg-white rounded-full animate-ping" />
-            <div className="w-2 h-2 bg-white rounded-full absolute" />
-            <span className="text-sm font-semibold ml-2">
-              {language === 'en' ? 'ACTIVE' : language === 'es' ? 'ACTIVA' : 'ATIVA'}
-            </span>
+        <div className="absolute top-5 right-20 z-10">
+          <div className="flex items-center gap-1.5 bg-red-600 text-white px-3 py-1.5 rounded-full shadow-lg shadow-red-500/30">
+            <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+            <span className="text-[11px] font-semibold tracking-wider">ACTIVE</span>
           </div>
         </div>
       )}
+
+      {/* Borde inferior con gradiente rojo para indicar categoría */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500/50 via-red-500 to-red-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </div>
   );
 };
