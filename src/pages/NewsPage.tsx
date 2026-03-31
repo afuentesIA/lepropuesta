@@ -43,7 +43,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
     img.onload = () => setHeroImageLoaded(true);
     img.onerror = () => {
       console.log('Error loading hero image, usando fallback');
-      setHeroImageLoaded(true); // Igual marcamos como cargada para mostrar el fallback
+      setHeroImageLoaded(true);
     };
   }, []);
 
@@ -248,14 +248,13 @@ export const NewsPage = ({ language }: NewsPageProps) => {
     <div ref={pageRef} className="min-h-screen bg-white">
       {/* Hero Section con imagen tenue - Versión específica para iOS */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative min-h-screen flex items-center overflow-hidden">
-        {/* Fondo con imagen - diferente enfoque para iOS */}
+        {/* Fondo con imagen */}
         <div 
           className="absolute inset-0"
           style={{
-            backgroundColor: '#1a1a1a', // Color de fondo mientras carga
+            backgroundColor: '#1a1a1a',
           }}
         >
-          {/* Imagen de fondo como elemento img para mejor compatibilidad iOS */}
           <img
             src={heroData.backgroundImage}
             alt=""
@@ -264,11 +263,10 @@ export const NewsPage = ({ language }: NewsPageProps) => {
             }`}
             style={{
               objectPosition: 'center',
-              filter: 'brightness(0.7)' // Para el efecto de overlay
+              filter: 'brightness(0.7)'
             }}
             onLoad={() => setHeroImageLoaded(true)}
           />
-          {/* Overlay oscuro */}
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
@@ -293,8 +291,8 @@ export const NewsPage = ({ language }: NewsPageProps) => {
         </div>
       </section>
 
-      {/* Past Events Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      {/* Past Events Section - Fondo blanco, tarjetas hueso */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="section-title text-5xl sm:text-6xl font-bold text-black text-center mb-16">
             {language === 'en' ? 'Where We\'ve Been' : language === 'es' ? 'Donde Hemos Estado' : 'Onde Estivemos'}
@@ -303,7 +301,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
           <div className="grid lg:grid-cols-3 gap-8">
             {pastEvents.map((event, index) => (
               <div key={index} className="event-card group cursor-pointer">
-                <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
+                <div className="bg-stone-50 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-stone-200">
                   <div className="relative aspect-video overflow-hidden">
                     <img
                       src={event.image}
@@ -311,12 +309,12 @@ export const NewsPage = ({ language }: NewsPageProps) => {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-black text-white text-xs font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-black/80 text-white text-xs font-semibold rounded-full backdrop-blur-sm">
                         {event.category}
                       </span>
                     </div>
                     <div className="absolute top-4 right-4">
-                      <span className="px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full shadow-md">
                         {language === 'en' ? 'COMPLETED' : language === 'es' ? 'COMPLETADO' : 'CONCLUÍDO'}
                       </span>
                     </div>
@@ -324,7 +322,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
                   
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-black mb-3">{event.title}</h3>
-                    <p className="text-gray-600 mb-4 leading-relaxed">{event.description}</p>
+                    <p className="text-stone-600 mb-4 leading-relaxed">{event.description}</p>
                     
                     <div className="flex items-center gap-4 text-sm text-red-600 mb-4">
                       <div className="flex items-center gap-1">
@@ -348,7 +346,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
                       ))}
                     </div>
 
-                    <button className="w-full py-3 border-2 border-red-300 text-red-600 font-semibold rounded-xl hover:border-red-500 hover:text-red-700 transition-all duration-300">
+                    <button className="w-full py-3 border-2 border-red-200 text-red-600 font-semibold rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300">
                       {language === 'en' ? 'View Recap' : language === 'es' ? 'Ver Resumen' : 'Ver Resumo'}
                     </button>
                   </div>
@@ -359,8 +357,8 @@ export const NewsPage = ({ language }: NewsPageProps) => {
         </div>
       </section>
 
-      {/* Upcoming Events Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Upcoming Events Section - Fondo blanco, tarjetas hueso */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="section-title text-5xl sm:text-6xl font-bold text-black text-center mb-16">
             {language === 'en' ? 'Where We\'ll Be' : language === 'es' ? 'Donde Estaremos' : 'Onde Estaremos'}
@@ -369,7 +367,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
           <div className="grid lg:grid-cols-3 gap-8">
             {upcomingEvents.map((event, index) => (
               <div key={index} className="event-card group cursor-pointer">
-                <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-red-500">
+                <div className="bg-stone-50 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border-2 border-stone-200 hover:border-red-500">
                   <div className="relative aspect-video overflow-hidden">
                     <img
                       src={event.image}
@@ -377,15 +375,15 @@ export const NewsPage = ({ language }: NewsPageProps) => {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full shadow-md">
                         {event.category}
                       </span>
                     </div>
                     <div className="absolute top-4 right-4">
-                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
                         event.status === 'confirmed' 
-                          ? 'bg-red-500 text-white' 
-                          : 'bg-red-300 text-red-700'
+                          ? 'bg-red-600 text-white' 
+                          : 'bg-amber-500 text-white'
                       }`}>
                         {event.status === 'confirmed' 
                           ? (language === 'en' ? 'CONFIRMED' : language === 'es' ? 'CONFIRMADO' : 'CONFIRMADO')
@@ -397,7 +395,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
                   
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-black mb-3">{event.title}</h3>
-                    <p className="text-gray-600 mb-4 leading-relaxed">{event.description}</p>
+                    <p className="text-stone-600 mb-4 leading-relaxed">{event.description}</p>
                     
                     <div className="space-y-2 mb-6">
                       <div className="flex items-center gap-2 text-sm text-red-600">
@@ -431,17 +429,17 @@ export const NewsPage = ({ language }: NewsPageProps) => {
         </div>
       </section>
 
-      {/* Live Stream Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-black text-white">
+      {/* Live Stream Section - Fondo blanco, tarjetas hueso */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="section-title text-5xl sm:text-6xl font-bold text-center mb-16">
+          <h2 className="section-title text-5xl sm:text-6xl font-bold text-black text-center mb-16">
             {liveStreamData.title}
           </h2>
           
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Stream con carátula */}
             <div className="lg:col-span-2">
-              <div className="live-card rounded-3xl overflow-hidden bg-gray-900">
+              <div className="live-card rounded-3xl overflow-hidden bg-stone-50 border border-stone-200 shadow-md">
                 <div className="relative aspect-video">
                   <img
                     src="./img/livesoon.jpg"
@@ -450,25 +448,25 @@ export const NewsPage = ({ language }: NewsPageProps) => {
                   />
                   <div className="absolute top-6 left-6 flex items-center gap-2">
                     <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                    <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
+                    <span className="px-3 py-1 bg-red-600 text-white text-sm font-bold rounded-full shadow-md">
                       {language === 'en' ? 'LIVE NOW' : language === 'es' ? 'EN VIVO' : 'AO VIVO'}
                     </span>
                   </div>
-                  <div className="absolute bottom-6 left-6 flex items-center gap-2 text-white">
-                    <Users className="w-5 h-5" />
-                    <span>{liveStreamData.currentStream.viewers} {language === 'en' ? 'watching' : language === 'es' ? 'viendo' : 'assistindo'}</span>
+                  <div className="absolute bottom-6 left-6 flex items-center gap-2 text-white bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                    <Users className="w-4 h-4" />
+                    <span className="text-sm">{liveStreamData.currentStream.viewers} {language === 'en' ? 'watching' : language === 'es' ? 'viendo' : 'assistindo'}</span>
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <button className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300">
+                    <button className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg">
                       <Play className="w-8 h-8 text-black ml-1" />
                     </button>
                   </div>
                 </div>
                 
                 <div className="p-8">
-                  <h3 className="text-2xl font-bold mb-4">{liveStreamData.currentStream.title}</h3>
-                  <p className="text-gray-300 mb-6">{liveStreamData.currentStream.description}</p>
-                  <div className="flex items-center gap-6 text-red-400">
+                  <h3 className="text-2xl font-bold text-black mb-4">{liveStreamData.currentStream.title}</h3>
+                  <p className="text-stone-600 mb-6">{liveStreamData.currentStream.description}</p>
+                  <div className="flex items-center gap-6 text-red-600">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
                       <span>{liveStreamData.currentStream.viewers} {language === 'en' ? 'viewers' : language === 'es' ? 'espectadores' : 'espectadores'}</span>
@@ -484,26 +482,26 @@ export const NewsPage = ({ language }: NewsPageProps) => {
             
             {/* Upcoming Streams */}
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold mb-6">
+              <h3 className="text-2xl font-bold text-black mb-6">
                 {language === 'en' ? 'Upcoming Streams' : language === 'es' ? 'Próximas Transmisiones' : 'Próximas Transmissões'}
               </h3>
               
               {liveStreamData.upcomingStreams.map((stream, index) => (
-                <div key={index} className="bg-gray-800 rounded-2xl p-6 hover:bg-gray-700 transition-all duration-300 group cursor-pointer">
+                <div key={index} className="bg-stone-50 rounded-2xl p-6 hover:bg-stone-100 transition-all duration-300 group cursor-pointer border border-stone-200">
                   <div className="flex gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-red-500/20 rounded-xl flex items-center justify-center group-hover:bg-red-500/30 transition-colors duration-300">
-                        <div className="text-red-400 font-semibold text-sm text-center">
+                      <div className="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center group-hover:bg-red-200 transition-colors duration-300">
+                        <div className="text-red-600 font-semibold text-sm text-center">
                           {stream.time}
                         </div>
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-white mb-2 group-hover:text-red-400 transition-colors duration-300">
+                      <h4 className="font-semibold text-black mb-2 group-hover:text-red-600 transition-colors duration-300">
                         {stream.title}
                       </h4>
-                      <p className="text-gray-400 text-sm">{stream.description}</p>
-                      <button className="mt-3 text-red-400 text-sm font-semibold hover:text-red-300 transition-colors flex items-center gap-1">
+                      <p className="text-stone-500 text-sm">{stream.description}</p>
+                      <button className="mt-3 text-red-600 text-sm font-semibold hover:text-red-700 transition-colors flex items-center gap-1">
                         {language === 'en' ? 'Set reminder' : language === 'es' ? 'Recordatorio' : 'Lembrete'}
                         <Clock className="w-3 h-3" />
                       </button>
@@ -515,10 +513,10 @@ export const NewsPage = ({ language }: NewsPageProps) => {
           </div>
 
           <div className="text-center mt-12">
-            <p className="text-xl text-gray-400 mb-6">
+            <p className="text-xl text-stone-600 mb-6">
               {liveStreamData.description}
             </p>
-            <button className="px-8 py-4 bg-red-600 text-white font-semibold rounded-2xl hover:bg-red-700 transition-all duration-300 hover:scale-105">
+            <button className="px-8 py-4 bg-red-600 text-white font-semibold rounded-2xl hover:bg-red-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/30">
               {language === 'en' ? 'View All Streams' : language === 'es' ? 'Ver Todas las Transmisiones' : 'Ver Todas as Transmissões'}
             </button>
           </div>
