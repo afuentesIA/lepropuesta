@@ -6,7 +6,6 @@ import { CategoryCard } from './CategoryCard';
 import { Category } from '../../types/category.types';
 import { Language } from '../../hooks/useLanguage';
 
-// Registrar el plugin de ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
 interface CategoriesSectionProps {
@@ -43,9 +42,9 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
     {
       id: 'robotic-stations',
       title: {
-        en: 'Robotic Welding Stations',
-        es: 'Estaciones Robóticas de Soldadura',
-        pt: 'Estações Robóticas de Soldagem'
+        en: 'Robotic Stations',
+        es: 'Estaciones Robóticas',
+        pt: 'Estações Robóticas'
       },
       description: {
         en: 'Complete turn-key welding solutions for complex applications',
@@ -61,9 +60,9 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
     {
       id: 'custom-cells',
       title: {
-        en: 'Custom Welding Cells',
-        es: 'Celdas de Soldadura Personalizadas',
-        pt: 'Células de Soldagem Personalizadas'
+        en: 'Custom Cells',
+        es: 'Celdas Personalizadas',
+        pt: 'Células Personalizadas'
       },
       description: {
         en: 'Fully customized welding cells designed for your specific needs',
@@ -75,7 +74,6 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
         '/img/cell2.png',
         '/img/cell3.png',
         '/img/cell4.png'
-
       ]
     }
   ];
@@ -84,7 +82,6 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
     if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Title animation
       gsap.from(titleRef.current, {
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -96,7 +93,6 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
         opacity: 0
       });
 
-      // Cards animation with stagger
       gsap.from('.category-card-wrapper', {
         scrollTrigger: {
           trigger: cardsRef.current,
@@ -114,31 +110,32 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 bg-black relative overflow-hidden">
-      {/* Fondo con efecto de luz */}
+    <section ref={sectionRef} className="py-32 bg-white relative overflow-hidden">
+      {/* Fondo blanco con efecto de luz sutil */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-[128px]" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-50/50 rounded-full blur-[128px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-50/50 rounded-full blur-[128px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
         <div className="text-center mb-20">
           <div className="inline-block mb-6">
-            <span className="text-red-400 text-xl font-semibold tracking-wide uppercase px-6 py-2 border border-red-500/20 rounded-full bg-red-500/5 backdrop-blur-sm">
+            <span className="text-red-600 text-xl font-semibold tracking-wide uppercase px-6 py-2 border border-red-200 rounded-full bg-red-50">
               {language === 'en' ? 'Solutions' : language === 'es' ? 'Soluciones' : 'Soluções'}
             </span>
           </div>
           <h2
             ref={titleRef}
-            className="text-6xl sm:text-7xl md:text-8xl font-bold text-white mb-10 tracking-tight"
+            className="text-6xl sm:text-7xl md:text-8xl font-bold mb-10 tracking-tight"
           >
-            {language === 'en' 
-              ? 'Choose Your Solution' 
-              : language === 'es' 
-              ? 'Elija Su Solución' 
-              : 'Escolha Sua Solução'}
+            <span className="text-black">
+              {language === 'en' ? 'Choose Your' : language === 'es' ? 'Elija Su' : 'Escolha Sua'}
+            </span>
+            <span className="block mt-4 text-red-600">
+              {language === 'en' ? 'Solution' : language === 'es' ? 'Solución' : 'Solução'}
+            </span>
           </h2>
-          <p className="text-2xl sm:text-3xl text-white/80 leading-relaxed font-light max-w-4xl mx-auto">
+          <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed font-light max-w-3xl mx-auto">
             {language === 'en'
               ? 'Select the category that best fits your production needs'
               : language === 'es'
