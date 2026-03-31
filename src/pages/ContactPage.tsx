@@ -22,21 +22,16 @@ export const ContactPage = ({ language }: ContactPageProps) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [showText, setShowText] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Solo animamos el hero-content cuando showText es true
-      if (showText) {
-        gsap.from('.hero-content', {
-          y: 100,
-          opacity: 0,
-          duration: 1.4,
-          ease: 'power4.out',
-          delay: 0.3
-        });
-      }
+      gsap.from('.hero-content', {
+        y: 100,
+        opacity: 0,
+        duration: 1.4,
+        ease: 'power4.out',
+        delay: 0.3
+      });
 
       gsap.from('.contact-form', {
         x: -80,
@@ -46,46 +41,26 @@ export const ContactPage = ({ language }: ContactPageProps) => {
         ease: 'power3.out',
       });
 
+      // Animación mejorada para las tarjetas de oficinas - más rápida y fluida
       gsap.utils.toArray('.office-card').forEach((card, index) => {
         gsap.from(card as Element, {
           scrollTrigger: {
             trigger: card as Element,
-            start: 'top 85%',
-            end: 'top 50%',
-            scrub: 1,
+            start: 'top 90%',
+            end: 'top 70%',
+            scrub: 0.3,
+            once: true, // Se ejecuta solo una vez
           },
-          y: 80,
+          y: 40,
           opacity: 0,
-          scale: 0.9,
+          duration: 0.6,
+          ease: 'power2.out',
+          delay: index * 0.1
         });
       });
     }, pageRef);
 
     return () => ctx.revert();
-  }, [showText]);
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (videoElement) {
-      const handleVideoEnd = () => {
-        setShowText(true);
-        // Congelar el video en el último frame
-        videoElement.pause();
-      };
-
-      videoElement.addEventListener('ended', handleVideoEnd);
-
-      // Intentar reproducir el video
-      videoElement.play().catch(error => {
-        console.log('Auto-play fue bloqueado:', error);
-        // Si no puede reproducir, mostrar el texto inmediatamente
-        setShowText(true);
-      });
-
-      return () => {
-        videoElement.removeEventListener('ended', handleVideoEnd);
-      };
-    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -163,74 +138,48 @@ export const ContactPage = ({ language }: ContactPageProps) => {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-white">
-      {/* Hero Section con Video */}
+      {/* Hero Section que abarca toda la pantalla con imagen de fondo */}
       <section className="relative min-h-[90vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Video de fondo - Siempre visible */}
+        {/* Imagen de fondo */}
         <div className="absolute inset-0 z-0">
-          <video
-            ref={videoRef}
+          <img
+            src="./img/contact.jpg"
+            alt="Robotics background"
             className="w-full h-full object-cover"
-            autoPlay
-            muted
-            playsInline
-            loop={false}
-          >
-            <source src="./img/contact-video.mp4" type="video/mp4" />
-            {/* Fallback a imagen si el video no puede cargarse */}
-            <img
-              src="./img/contact.jpg"
-              alt="Robotics background"
-              className="w-full h-full object-cover"
-            />
-          </video>
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30" />
         </div>
         
-        {/* Contenido del Hero - Solo visible cuando el video termina */}
-        {showText && (
-          <div className="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12">
-            <div className="max-w-7xl mx-auto">
-              <div className="hero-content text-center text-white">
-                <div className="inline-block mb-4 sm:mb-6 md:mb-8">
-                  <span className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-wide uppercase bg-red-600/90 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm whitespace-nowrap">
-                    {language === 'en' ? 'Contact' : language === 'es' ? 'Contacto' : 'Contato'}
-                  </span>
-                </div>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[10rem] font-bold mb-6 sm:mb-8 md:mb-10 tracking-tight leading-tight sm:leading-snug md:leading-none">
-                  {language === 'en' ? 'Get in Touch' : language === 'es' ? 'Contáctanos' : 'Entre em Contato'}
-                </h1>
-                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white/90 max-w-5xl lg:max-w-6xl mx-auto font-light leading-relaxed px-4 sm:px-6 md:px-8">
-                  {language === 'en'
-                    ? "We're here to help you transform your robotics operations across "
-                    : language === 'es'
-                    ? 'Estamos aquí para ayudarte a transformar tus operaciones robóticas en '
-                    : 'Estamos aqui para ajudá-lo a transformar suas operações robóticas em '}
-                  <span className="font-semibold text-red-300 whitespace-nowrap">Canada, United States, Mexico and Brazil</span>
-                </p>
+        <div className="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto">
+            <div className="hero-content text-center text-white">
+              <div className="inline-block mb-4 sm:mb-6 md:mb-8">
+                <span className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-wide uppercase bg-red-600/90 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-full backdrop-blur-sm whitespace-nowrap">
+                  {language === 'en' ? 'Contact' : language === 'es' ? 'Contacto' : 'Contato'}
+                </span>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Indicador de carga - Solo visible mientras el video se reproduce */}
-        {!showText && (
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 border-2 sm:border-4 border-white/30 border-t-white rounded-full animate-spin" />
-              <p className="text-white/80 text-xs sm:text-sm font-light tracking-wide">
-                {language === 'en' ? 'Loading...' : language === 'es' ? 'Cargando...' : 'Carregando...'}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[10rem] font-bold mb-6 sm:mb-8 md:mb-10 tracking-tight leading-tight sm:leading-snug md:leading-none">
+                {language === 'en' ? 'Get in Touch' : language === 'es' ? 'Contáctanos' : 'Entre em Contato'}
+              </h1>
+              <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white/90 max-w-5xl lg:max-w-6xl mx-auto font-light leading-relaxed px-4 sm:px-6 md:px-8">
+                {language === 'en'
+                  ? "We're here to help you transform your robotics operations across "
+                  : language === 'es'
+                  ? 'Estamos aquí para ayudarte a transformar tus operaciones robóticas en '
+                  : 'Estamos aqui para ajudá-lo a transformar suas operações robóticas em '}
+                <span className="font-semibold text-red-300 whitespace-nowrap">Canada, United States, Mexico and Brazil</span>
               </p>
             </div>
           </div>
-        )}
+        </div>
       </section>
 
-      {/* Sección de Contact Methods */}
+      {/* Sección de Contact Methods - Completamente separada del hero */}
       <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Phone Card */}
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl sm:shadow-2xl border border-gray-100">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl sm:shadow-2xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white">
                   <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -295,7 +244,7 @@ export const ContactPage = ({ language }: ContactPageProps) => {
             </div>
 
             {/* Email Card */}
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl sm:shadow-2xl border border-gray-100">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl sm:shadow-2xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white">
                   <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -337,7 +286,7 @@ export const ContactPage = ({ language }: ContactPageProps) => {
             </div>
 
             {/* Social Media Card */}
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl sm:shadow-2xl border border-gray-100">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl sm:shadow-2xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white">
                   <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -432,17 +381,17 @@ export const ContactPage = ({ language }: ContactPageProps) => {
         </div>
       </section>
 
-      {/* Offices Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-black">
+      {/* Offices Section - Fondo blanco, tarjetas hueso */}
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-white/10 rounded-2xl sm:rounded-3xl text-white mb-4 sm:mb-6 md:mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-red-100 rounded-2xl sm:rounded-3xl text-red-600 mb-4 sm:mb-6 md:mb-8">
               <Building2 className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" />
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 md:mb-8 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-black mb-4 sm:mb-6 md:mb-8 tracking-tight">
               {language === 'en' ? 'Our Global Offices' : language === 'es' ? 'Nuestras Oficinas Globales' : 'Nossos Escritórios Globais'}
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-white/80 max-w-3xl md:max-w-4xl mx-auto font-light leading-relaxed px-4 sm:px-6">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl md:max-w-4xl mx-auto font-light leading-relaxed px-4 sm:px-6">
               {language === 'en'
                 ? 'Visit us at one of our locations across the Americas'
                 : language === 'es'
@@ -455,37 +404,37 @@ export const ContactPage = ({ language }: ContactPageProps) => {
             {offices.map((office, index) => (
               <div
                 key={index}
-                className="office-card group bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl lg:rounded-[2.5rem] overflow-hidden hover:bg-white/10 transition-all duration-700 hover:scale-[1.02] border border-white/10"
+                className="office-card group bg-stone-50 rounded-2xl sm:rounded-3xl lg:rounded-[2.5rem] overflow-hidden hover:shadow-xl transition-all duration-500 border border-stone-200"
               >
                 <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                   <img
                     src={office.image}
                     alt={office.city}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/40 to-transparent" />
                   <div className="absolute top-4 sm:top-6 right-4 sm:right-6 text-3xl sm:text-4xl md:text-5xl">{office.flag}</div>
                 </div>
                 <div className="p-6 sm:p-8 md:p-10">
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">{office.city}</h3>
-                  <p className="text-base sm:text-lg md:text-xl text-white/60 mb-4 sm:mb-6">{office.country}</p>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-2 tracking-tight">{office.city}</h3>
+                  <p className="text-base sm:text-lg md:text-xl text-stone-500 mb-4 sm:mb-6">{office.country}</p>
                   <div className="space-y-3 sm:space-y-4">
                     <div className="flex items-start gap-3">
-                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0 mt-0.5 sm:mt-1" />
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0 mt-0.5 sm:mt-1" />
                       <div>
-                        <p className="text-white/90 text-sm sm:text-base">{office.address}</p>
-                        <p className="text-white/70 text-sm sm:text-base">{office.zip}</p>
+                        <p className="text-stone-700 text-sm sm:text-base">{office.address}</p>
+                        <p className="text-stone-500 text-sm sm:text-base">{office.zip}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0" />
-                      <a href={`tel:${office.phone}`} className="text-white/90 hover:text-white transition-colors text-sm sm:text-base">
+                      <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
+                      <a href={`tel:${office.phone}`} className="text-stone-700 hover:text-red-600 transition-colors text-sm sm:text-base">
                         {office.phone}
                       </a>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0" />
-                      <a href={`mailto:${office.email}`} className="text-white/90 hover:text-white transition-colors text-sm sm:text-base">
+                      <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
+                      <a href={`mailto:${office.email}`} className="text-stone-700 hover:text-red-600 transition-colors text-sm sm:text-base">
                         {office.email}
                       </a>
                     </div>
