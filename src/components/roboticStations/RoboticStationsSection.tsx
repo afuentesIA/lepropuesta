@@ -143,29 +143,27 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []); // Sin dependencia de activeStation
+  }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
-      {/* Fondo con efectos sutiles */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-red-500/5 rounded-full blur-[128px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[128px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.03),transparent_70%)]" />
-      </div>
-
+    <section ref={sectionRef} className="py-32 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
         {/* Título */}
         <div ref={titleRef} className="text-center mb-20">
           <div className="inline-block mb-6">
-            <span className="text-red-400 text-xl font-semibold tracking-wide uppercase px-6 py-2 border border-red-500/20 rounded-full bg-red-500/5 backdrop-blur-sm">
+            <span className="text-red-600 text-xl font-semibold tracking-wide uppercase px-6 py-2 border border-red-200 rounded-full bg-red-50">
               {language === 'en' ? 'Robotic Welding Stations' : language === 'es' ? 'Estaciones Robóticas' : 'Estações Robóticas'}
             </span>
           </div>
-          <h2 className="text-6xl sm:text-7xl md:text-8xl font-bold text-white mb-10 tracking-tight">
-            {language === 'en' ? 'Precision Engineering' : language === 'es' ? 'Ingeniería de Precisión' : 'Engenharia de Precisão'}
+          <h2 className="text-6xl sm:text-7xl md:text-8xl font-bold mb-10 tracking-tight">
+            <span className="text-black">
+              {language === 'en' ? 'Precision' : language === 'es' ? 'Ingeniería' : 'Engenharia'}
+            </span>
+            <span className="block text-red-600 mt-4">
+              {language === 'en' ? 'Engineering' : language === 'es' ? 'de Precisión' : 'de Precisão'}
+            </span>
           </h2>
-          <p className="text-2xl sm:text-3xl text-white/80 leading-relaxed font-light max-w-4xl mx-auto">
+          <p className="text-2xl sm:text-3xl text-gray-600 leading-relaxed font-light max-w-4xl mx-auto">
             {language === 'en'
               ? 'Advanced robotic welding solutions for complex industrial applications'
               : language === 'es'
@@ -174,7 +172,7 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
           </p>
         </div>
 
-        {/* Selector de estaciones - Siempre visible */}
+        {/* Selector de estaciones - Color hueso */}
         <div className="station-selector grid grid-cols-1 md:grid-cols-3 gap-4 mb-20">
           {roboticStations.map((station, index) => (
             <button
@@ -182,15 +180,15 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
               onClick={() => setActiveStation(index)}
               className={`group relative p-8 rounded-2xl transition-all duration-700 ${
                 activeStation === index
-                  ? 'bg-gradient-to-br from-red-600/20 to-red-600/5 border-2 border-red-500/50 scale-105'
-                  : 'bg-white/5 border border-white/10 hover:bg-white/10'
+                  ? 'bg-gradient-to-br from-stone-100 to-stone-50 border-2 border-red-500 shadow-xl'
+                  : 'bg-stone-50 border border-stone-200 hover:bg-stone-100 hover:shadow-md'
               }`}
             >
               <div className="flex flex-col items-start gap-4">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${
                   activeStation === index
-                    ? 'bg-red-500 text-white'
-                    : 'bg-white/10 text-white/60 group-hover:bg-white/20'
+                    ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                    : 'bg-stone-200 text-stone-600 group-hover:bg-stone-300'
                 }`}>
                   {index === 0 && <Layers className="w-6 h-6" />}
                   {index === 1 && <Maximize2 className="w-6 h-6" />}
@@ -198,12 +196,12 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
                 </div>
                 <div className="text-left">
                   <div className={`text-2xl font-bold mb-2 transition-colors duration-500 ${
-                    activeStation === index ? 'text-white' : 'text-white/60'
+                    activeStation === index ? 'text-black' : 'text-stone-700'
                   }`}>
                     {station.name}
                   </div>
                   <div className={`text-sm transition-colors duration-500 ${
-                    activeStation === index ? 'text-red-400' : 'text-white/40'
+                    activeStation === index ? 'text-red-600' : 'text-stone-500'
                   }`}>
                     {station.model}
                   </div>
@@ -217,7 +215,7 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
           ))}
         </div>
 
-        {/* Contenido de la estación seleccionada - Siempre visible cuando se selecciona */}
+        {/* Contenido de la estación seleccionada */}
         <div className="station-content-wrapper">
           {roboticStations.map((station, index) => (
             <div
@@ -231,7 +229,7 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
               <div className="grid lg:grid-cols-2 gap-16 items-center">
                 {/* Imagen */}
                 <div className="relative">
-                  <div className="relative aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-white/5 to-white/10 border border-white/10">
+                  <div className="relative aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-stone-100 to-stone-50 border border-stone-200 shadow-xl">
                     <img
                       src={station.image}
                       alt={station.model}
@@ -240,10 +238,10 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
                         const target = e.target as HTMLImageElement;
                         target.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
                           `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
-                            <rect width="400" height="400" fill="#1a1a1a"/>
-                            <rect x="50" y="50" width="300" height="300" fill="#333" rx="20"/>
-                            <text x="200" y="200" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">${station.model}</text>
-                            <text x="200" y="240" font-family="Arial" font-size="16" fill="#999" text-anchor="middle">${station.specs}</text>
+                            <rect width="400" height="400" fill="#f5f5f4"/>
+                            <rect x="50" y="50" width="300" height="300" fill="#e7e5e4" rx="20"/>
+                            <text x="200" y="200" font-family="Arial" font-size="24" fill="#444" text-anchor="middle">${station.model}</text>
+                            <text x="200" y="240" font-family="Arial" font-size="16" fill="#78716c" text-anchor="middle">${station.specs}</text>
                           </svg>`
                         );
                       }}
@@ -251,63 +249,59 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
                     
                     {/* Especificaciones en la imagen */}
                     <div className="absolute top-6 left-6">
-                      <div className="flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-full border border-white/10">
-                        <Cpu className="w-4 h-4 text-red-400" />
-                        <span className="text-white text-sm font-medium">{station.specs}</span>
+                      <div className="flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-xl rounded-full border border-stone-200 shadow-sm">
+                        <Cpu className="w-4 h-4 text-red-600" />
+                        <span className="text-stone-700 text-sm font-medium">{station.specs}</span>
                       </div>
                     </div>
                     
                     <div className="absolute bottom-6 right-6">
-                      <div className="px-4 py-2 bg-red-600/90 backdrop-blur-xl rounded-full">
+                      <div className="px-4 py-2 bg-red-600 rounded-full shadow-lg shadow-red-500/30">
                         <span className="text-white text-sm font-semibold">{station.model}</span>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Efectos decorativos */}
-                  <div className="absolute -top-6 -right-6 w-32 h-32 bg-red-500/10 rounded-full blur-2xl" />
-                  <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl" />
                 </div>
 
                 {/* Información */}
                 <div className="space-y-8">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-red-600/20 flex items-center justify-center">
-                        <Target className="w-6 h-6 text-red-400" />
+                      <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                        <Target className="w-6 h-6 text-red-600" />
                       </div>
-                      <span className="text-red-400 text-sm font-semibold uppercase tracking-wider">
+                      <span className="text-red-600 text-sm font-semibold uppercase tracking-wider">
                         {language === 'en' ? 'Featured Station' : language === 'es' ? 'Estación Destacada' : 'Estação em Destaque'}
                       </span>
                     </div>
-                    <h3 className="text-5xl font-bold text-white mb-4 tracking-tight">
+                    <h3 className="text-5xl font-bold text-black mb-4 tracking-tight">
                       {station.model}
                     </h3>
-                    <p className="text-xl text-white/80 leading-relaxed">
+                    <p className="text-xl text-stone-600 leading-relaxed">
                       {station.longDescription}
                     </p>
                   </div>
 
-                  {/* Features Grid */}
+                  {/* Features Grid - Color hueso */}
                   <div className="grid grid-cols-3 gap-4">
                     {station.features.map((feature, idx) => (
-                      <div key={idx} className="bg-white/5 rounded-xl p-4 border border-white/10">
-                        <div className="text-red-400 mb-2">{feature.icon}</div>
-                        <div className="text-white/90 text-sm font-medium">{feature.label}</div>
+                      <div key={idx} className="bg-stone-50 rounded-xl p-4 border border-stone-200 hover:border-red-200 hover:shadow-md transition-all duration-300">
+                        <div className="text-red-600 mb-2">{feature.icon}</div>
+                        <div className="text-stone-700 text-sm font-medium">{feature.label}</div>
                       </div>
                     ))}
                   </div>
 
                   {/* Applications */}
                   <div>
-                    <h4 className="text-white/60 text-sm font-semibold uppercase tracking-wider mb-4">
+                    <h4 className="text-stone-500 text-sm font-semibold uppercase tracking-wider mb-4">
                       {language === 'en' ? 'Applications' : language === 'es' ? 'Aplicaciones' : 'Aplicações'}
                     </h4>
                     <div className="flex flex-wrap gap-3">
                       {station.applications.map((app, idx) => (
                         <span
                           key={idx}
-                          className="px-4 py-2 bg-white/5 rounded-full text-white/80 text-sm border border-white/10"
+                          className="px-4 py-2 bg-stone-100 rounded-full text-stone-700 text-sm border border-stone-200 hover:border-red-200 hover:bg-red-50 transition-all duration-300"
                         >
                           {app}
                         </span>
@@ -335,7 +329,7 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
 
         {/* Separador decorativo */}
         <div className="mt-32 flex justify-center">
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
         </div>
       </div>
     </section>
