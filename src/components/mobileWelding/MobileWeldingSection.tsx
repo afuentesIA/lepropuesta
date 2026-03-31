@@ -15,7 +15,6 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
   const [currentSlides, setCurrentSlides] = useState<number[]>([0, 0]);
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
 
-  // Reuse the exact same products data from original
   const products = [
     {
       id: 'maverick-x',
@@ -117,7 +116,7 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
         ? 'Compact, powerful, and intelligent welding robot for tight spaces. Equipped with advanced AI, 3D vision technology, and pre-installed welding programs for precise automation without programming.'
         : language === 'es'
         ? 'Robot de soldadura compacto, potente e inteligente para espacios reducidos. Equipado con IA avanzada, tecnología de visión 3D y programas de soldadura preinstalados para automatización precisa sin programación.'
-        : 'Robô de soldagem compacto, potente e inteligente para espacios reduzidos. Equipado com IA avançada, tecnologia de visão 3D e programas de soldagem pré-instalados para automação precisa sem programação.',
+        : 'Robô de soldagem compacto, potente e inteligente para espaços reduzidos. Equipado com IA avançada, tecnologia de visão 3D e programas de soldagem pré-instalados para automação precisa sem programação.',
       specs: [
         { label: language === 'en' ? 'Total Power' : language === 'es' ? 'Potencia Total' : 'Potência Total', value: '30KVA', icon: <Zap className="w-5 h-5" /> },
         { label: language === 'en' ? 'Robot Arm Range' : language === 'es' ? 'Alcance del Brazo' : 'Alcance do Braço', value: '2010mm', icon: <Move3d className="w-5 h-5" /> },
@@ -200,7 +199,6 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
     }
   ];
 
-  // Recreate all the exact same animations and behaviors
   useEffect(() => {
     if (!sectionRef.current) return;
 
@@ -290,52 +288,45 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
       {products.map((product, productIndex) => (
         <section
           key={product.id}
-          className={`product-section py-32 ${productIndex % 2 === 0 ? 'bg-white' : 'bg-black'}`}
+          className={`product-section py-32 ${productIndex % 2 === 0 ? 'bg-white' : 'bg-white'}`}
         >
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid lg:grid-cols-2 gap-20 items-center mb-32">
               <div className={productIndex % 2 === 1 ? 'lg:order-2' : ''}>
                 <div className="space-y-10">
                   <div className="inline-block">
-                    <span className={`text-lg font-semibold tracking-wide uppercase ${productIndex % 2 === 0 ? 'text-red-600' : 'text-red-400'}`}>
+                    <span className="text-lg font-semibold tracking-wide uppercase text-red-600">
                       {language === 'en' ? 'Featured' : language === 'es' ? 'Destacado' : 'Destacado'}
                     </span>
                   </div>
-                  <h2 className={`text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight leading-none ${productIndex % 2 === 0 ? 'text-black' : 'text-white'}`}>
+                  <h2 className="text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight leading-none text-black">
                     {product.name}
                   </h2>
-                  <p className={`text-2xl sm:text-3xl leading-relaxed font-light ${productIndex % 2 === 0 ? 'text-gray-600' : 'text-white/80'}`}>
+                  <p className="text-2xl sm:text-3xl leading-relaxed font-light text-gray-600">
                     {product.tagline}
                   </p>
-                  <div className={`text-4xl sm:text-5xl font-bold ${productIndex % 2 === 0 ? 'text-black' : 'text-white'}`}>
+                  <div className="text-4xl sm:text-5xl font-bold text-black">
                     {product.price}
                   </div>
-                  <p className={`text-xl leading-relaxed ${productIndex % 2 === 0 ? 'text-gray-600' : 'text-white/70'}`}>
+                  <p className="text-xl leading-relaxed text-gray-600">
                     {product.description}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-5 pt-4">
-                    <button className={`inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold rounded-full transition-all duration-500 hover:scale-105 group ${
-                      productIndex % 2 === 0
-                        ? 'bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 hover:shadow-[0_20px_60px_rgba(220,38,38,0.4)]'
-                        : 'bg-white text-black hover:bg-gray-100 hover:shadow-2xl'
-                    }`}>
+                    <button className="inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-semibold rounded-full transition-all duration-500 hover:scale-105 group bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 hover:shadow-[0_20px_60px_rgba(220,38,38,0.4)]">
                       <span>{language === 'en' ? 'Buy Now' : language === 'es' ? 'Comprar Ahora' : 'Comprar Agora'}</span>
                       <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
                     <button
                       onClick={() => setSelectedProduct(productIndex)}
-                      className={`px-10 py-5 border-2 text-lg font-semibold rounded-full transition-all duration-500 hover:scale-105 ${
-                      productIndex % 2 === 0
-                        ? 'border-black text-black hover:bg-black hover:text-white'
-                        : 'border-white text-white hover:bg-white hover:text-black'
-                    }`}>
+                      className="px-10 py-5 border-2 border-black text-black text-lg font-semibold rounded-full transition-all duration-500 hover:scale-105 hover:bg-black hover:text-white"
+                    >
                       {language === 'en' ? 'View Details' : language === 'es' ? 'Ver Detalles' : 'Ver Detalhes'}
                     </button>
                   </div>
                 </div>
               </div>
               <div className={productIndex % 2 === 1 ? 'lg:order-1' : ''}>
-                <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
+                <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-2xl group bg-gradient-to-br from-gray-50 to-white">
                   <div className="relative w-full h-full">
                     {product.images.map((image, index) => (
                       <div
@@ -351,7 +342,7 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
                         <img
                           src={image}
                           alt={`${product.name} ${index + 1}`}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain p-8"
                         />
                       </div>
                     ))}
@@ -374,18 +365,12 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
                       >
                         <div className={`w-3 h-3 rounded-full transition-all duration-500 ${
                           index === currentSlides[productIndex]
-                            ? productIndex % 2 === 0
-                              ? 'bg-red-600 w-8'
-                              : 'bg-red-400 w-8'
-                            : productIndex % 2 === 0
-                            ? 'bg-gray-300 hover:bg-gray-400'
-                            : 'bg-white/30 hover:bg-white/50'
+                            ? 'bg-red-600 w-8'
+                            : 'bg-gray-300 hover:bg-gray-400'
                         }`} />
 
                         {index === currentSlides[productIndex] && (
-                          <div className={`absolute inset-0 rounded-full animate-ping ${
-                            productIndex % 2 === 0 ? 'bg-red-600' : 'bg-red-400'
-                          }`} />
+                          <div className="absolute inset-0 rounded-full animate-ping bg-red-600" />
                         )}
                       </button>
                     ))}
@@ -394,26 +379,18 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
                   <div className="absolute inset-0 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                       onClick={() => prevSlide(productIndex)}
-                      className="w-1/4 h-full flex items-center justify-start pl-6 hover:bg-gradient-to-r from-black/10 to-transparent transition-all duration-300"
+                      className="w-1/4 h-full flex items-center justify-start pl-6 hover:bg-gradient-to-r from-black/5 to-transparent transition-all duration-300"
                     >
-                      <div className={`w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 ${
-                        productIndex % 2 === 0
-                          ? 'bg-white/80 text-black hover:bg-white'
-                          : 'bg-black/80 text-white hover:bg-black'
-                      }`}>
+                      <div className="w-12 h-12 rounded-full backdrop-blur-md bg-white/80 text-black flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white">
                         <ChevronLeft className="w-6 h-6" />
                       </div>
                     </button>
 
                     <button
                       onClick={() => nextSlide(productIndex)}
-                      className="w-1/4 h-full flex items-center justify-end pr-6 hover:bg-gradient-to-l from-black/10 to-transparent transition-all duration-300"
+                      className="w-1/4 h-full flex items-center justify-end pr-6 hover:bg-gradient-to-l from-black/5 to-transparent transition-all duration-300"
                     >
-                      <div className={`w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 ${
-                        productIndex % 2 === 0
-                          ? 'bg-white/80 text-black hover:bg-white'
-                          : 'bg-black/80 text-white hover:bg-black'
-                      }`}>
+                      <div className="w-12 h-12 rounded-full backdrop-blur-md bg-white/80 text-black flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white">
                         <ChevronRight className="w-6 h-6" />
                       </div>
                     </button>
@@ -426,30 +403,22 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
 
             <div className="space-y-24">
               <div>
-                <h3 className={`text-5xl sm:text-6xl font-bold mb-16 tracking-tight ${productIndex % 2 === 0 ? 'text-black' : 'text-white'}`}>
+                <h3 className="text-5xl sm:text-6xl font-bold mb-16 tracking-tight text-black">
                   {language === 'en' ? 'Technical Specifications' : language === 'es' ? 'Especificaciones Técnicas' : 'Especificações Técnicas'}
                 </h3>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
-                      className={`spec-card group rounded-3xl p-8 transition-all duration-500 hover:scale-105 ${
-                        productIndex % 2 === 0
-                          ? 'bg-gradient-to-br from-gray-50 to-white hover:shadow-2xl border border-gray-100'
-                          : 'bg-white/5 hover:bg-white/10 border border-white/10'
-                      }`}
+                      className="spec-card group rounded-3xl p-8 transition-all duration-500 hover:scale-105 bg-gradient-to-br from-gray-50 to-white hover:shadow-2xl border border-gray-100"
                     >
-                      <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${
-                        productIndex % 2 === 0
-                          ? 'bg-gradient-to-br from-red-500 to-red-600 text-white'
-                          : 'bg-white/10 text-white'
-                      }`}>
+                      <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 bg-gradient-to-br from-red-500 to-red-600 text-white">
                         {spec.icon}
                       </div>
-                      <div className={`text-sm mb-2 ${productIndex % 2 === 0 ? 'text-gray-500' : 'text-white/60'}`}>
+                      <div className="text-sm mb-2 text-gray-500">
                         {spec.label}
                       </div>
-                      <div className={`text-2xl font-bold ${productIndex % 2 === 0 ? 'text-black' : 'text-white'}`}>
+                      <div className="text-2xl font-bold text-black">
                         {spec.value}
                       </div>
                     </div>
@@ -458,7 +427,7 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
               </div>
 
               <div>
-                <h3 className={`text-5xl sm:text-6xl font-bold mb-16 tracking-tight ${productIndex % 2 === 0 ? 'text-black' : 'text-white'}`}>
+                <h3 className="text-5xl sm:text-6xl font-bold mb-16 tracking-tight text-black">
                   {language === 'en' ? 'Key Features' : language === 'es' ? 'Características Clave' : 'Características Principais'}
                 </h3>
                 <div className="space-y-12">
@@ -467,16 +436,14 @@ export const MobileWeldingSection = ({ language }: MobileWeldingSectionProps) =>
                       key={index}
                       className={`feature-item pb-12 ${
                         index < product.features.length - 1
-                          ? productIndex % 2 === 0
-                            ? 'border-b border-gray-200'
-                            : 'border-b border-white/10'
+                          ? 'border-b border-gray-200'
                           : ''
                       }`}
                     >
-                      <h4 className={`text-3xl font-bold mb-4 tracking-tight ${productIndex % 2 === 0 ? 'text-black' : 'text-white'}`}>
+                      <h4 className="text-3xl font-bold mb-4 tracking-tight text-black">
                         {feature.title}
                       </h4>
-                      <p className={`text-xl leading-relaxed ${productIndex % 2 === 0 ? 'text-gray-600' : 'text-white/70'}`}>
+                      <p className="text-xl leading-relaxed text-gray-600">
                         {feature.description}
                       </p>
                     </div>
