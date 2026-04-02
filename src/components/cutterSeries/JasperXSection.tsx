@@ -16,14 +16,11 @@ const t = (language: Language, en: string, es: string, pt: string) =>
 export const JasperXSection = ({ language }: JasperXSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Capacidades actualizadas: eliminadas Vision Calibration, Secondary Blanking, Head Cutting y Groove Nesting
   const capabilities = [
-    t(language, 'Vision Calibration', 'Calibración Visual', 'Calibração Visual'),
     t(language, 'Deformation Compensation', 'Compensación de Deformación', 'Compensação de Deformação'),
     t(language, 'Groove Editing', 'Edición de Ranuras', 'Edição de Ranhuras'),
-    t(language, 'Groove Nesting', 'Anidamiento de Ranuras', 'Aninhamento de Ranhuras'),
-    t(language, 'Secondary Blanking', 'Corte Secundario', 'Corte Secundário'),
     t(language, 'Bend Pipe Cutting', 'Corte de Tubos Curvos', 'Corte de Tubos Curvos'),
-    t(language, 'Head Cutting', 'Corte de Cabezales', 'Corte de Cabeçotes'),
     t(language, 'Branch Pipe Cutting', 'Corte de Tubos Derivados', 'Corte de Tubos Derivados'),
     t(language, 'Tapered Pipe Cutting', 'Corte de Tubos Cónicos', 'Corte de Tubos Cônicos'),
     t(language, 'Curved Surface Cutting', 'Corte de Superficies Curvas', 'Corte de Superfícies Curvas'),
@@ -164,6 +161,10 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
     return () => ctx.revert();
   }, []);
 
+  // Dividir capabilities en dos columnas: 4 en la primera, 3 en la segunda
+  const firstColumnCapabilities = capabilities.slice(0, 4);
+  const secondColumnCapabilities = capabilities.slice(4, 7);
+
   return (
     <div ref={sectionRef} className="bg-white overflow-hidden">
 
@@ -196,8 +197,8 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
           >
             {t(
               language,
-              'AI-powered cutting for narrow-space operations. Loyalty AI Cutting System with 3D Vision — no programming, no teaching.',
-              'Corte con IA para operaciones en espacios reducidos. Sistema de corte Loyalty AI con visión 3D — sin programación ni enseñanza.',
+              'AI-powered cutting. Solution AI Cutting System with 3D Vision — no programming, no teaching.',
+              'Corte con IA. Solucion AI con visión 3D — sin programación ni enseñanza.',
               'Corte com IA para operações em espaços reduzidos. Sistema Loyalty AI com visão 3D — sem programação nem ensino.',
             )}
           </p>
@@ -222,7 +223,7 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
           </div>
         </div>
 
-        {/* Right: image panel - sin efectos de hover */}
+        {/* Right: image panel - ajustes para celular */}
         <div className="jx-image-wrap relative lg:w-[48%] bg-stone-50 flex items-center justify-center min-h-[55vw] lg:min-h-0">
           {/* big red circle bg */}
           <div
@@ -234,25 +235,28 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
             }}
           />
 
-          <img
-            src="./img/Jasper_X.png"
-            alt="Jasper X"
-            className="relative z-10 w-[78%] max-w-xl object-contain drop-shadow-2xl"
-            style={{ filter: 'drop-shadow(0 40px 60px rgba(0,0,0,0.15))' }}
-          />
-
-          {/* floating badge top-left */}
-          <div className="absolute top-8 left-8 flex items-center gap-2 bg-white border border-gray-100 rounded-full px-4 py-2 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-[11px] font-bold tracking-widest uppercase text-gray-700">Loyalty AI</span>
+          {/* Contenedor de la imagen con padding para evitar solapamiento en móvil */}
+          <div className="relative w-full h-full flex items-center justify-center pt-8 pb-8 lg:pt-0 lg:pb-0">
+            <img
+              src="./img/Jasper_X.png"
+              alt="Jasper X"
+              className="relative z-10 w-[70%] sm:w-[78%] max-w-xl object-contain drop-shadow-2xl"
+              style={{ filter: 'drop-shadow(0 40px 60px rgba(0,0,0,0.15))' }}
+            />
           </div>
 
-          {/* floating badge bottom-right */}
-          <div className="absolute bottom-8 right-8 bg-red-600 text-white rounded-2xl px-5 py-3 shadow-lg">
-            <p className="text-[10px] font-bold tracking-widest uppercase opacity-70 mb-0.5">
-              {t(language, 'Control', 'Control', 'Controle')}
+          {/* floating badge top-left - reposicionado más arriba en móvil */}
+          <div className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center gap-2 bg-white border border-gray-100 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 shadow-sm z-20">
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-[9px] sm:text-[11px] font-bold tracking-widest uppercase text-gray-700">CUTTING</span>
+          </div>
+
+          {/* floating badge bottom-right - reposicionado más abajo y a la derecha en móvil */}
+          <div className="absolute bottom-2 right-2 sm:bottom-8 sm:right-8 bg-red-600 text-white rounded-xl sm:rounded-2xl px-3 py-1.5 sm:px-5 sm:py-3 shadow-lg z-20">
+            <p className="text-[7px] sm:text-[10px] font-bold tracking-widest uppercase opacity-70 mb-0.5">
+              {t(language, 'CONTROL', 'CONTROL', 'CONTROLE')}
             </p>
-            <p className="text-lg font-black leading-none">2.5 km/h</p>
+            <p className="text-sm sm:text-lg font-black leading-none">2.5 km/h</p>
           </div>
         </div>
       </section>
@@ -280,29 +284,51 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
           </div>
         </div>
 
-        {/* numbered list con hover effects mejorados */}
+        {/* numbered list con dos columnas: 4 y 3 elementos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-          {capabilities.map((cap, i) => (
-            <div
-              key={i}
-              className="jx-cap-tag group relative flex items-center gap-5 px-8 py-6 border-b border-gray-200 last:border-b-0 sm:[&:nth-last-child(2)]:border-b-0 hover:bg-red-50/40 transition-all duration-500 cursor-default hover:pl-12"
-            >
-              {/* animated number indicator */}
-              <span
-                className="flex-shrink-0 w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-400 group-hover:border-red-300 group-hover:text-red-500 group-hover:scale-110 transition-all duration-300"
-                style={{ fontVariantNumeric: 'tabular-nums' }}
+          {/* Primera columna: 4 capacidades */}
+          <div className="border-r border-gray-200">
+            {firstColumnCapabilities.map((cap, i) => (
+              <div
+                key={i}
+                className="jx-cap-tag group relative flex items-center gap-5 px-8 py-6 border-b border-gray-200 last:border-b-0 hover:bg-red-50/40 transition-all duration-500 cursor-default hover:pl-12"
               >
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="text-lg font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
-                {cap}
-              </span>
-              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-red-500 group-hover:scale-150 transition-all duration-300 flex-shrink-0" />
-              
-              {/* hover line effect */}
-              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-red-500 scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
-            </div>
-          ))}
+                <span
+                  className="flex-shrink-0 w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-400 group-hover:border-red-300 group-hover:text-red-500 group-hover:scale-110 transition-all duration-300"
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="text-lg font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
+                  {cap}
+                </span>
+                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-red-500 group-hover:scale-150 transition-all duration-300 flex-shrink-0" />
+                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-red-500 scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+              </div>
+            ))}
+          </div>
+
+          {/* Segunda columna: 3 capacidades */}
+          <div>
+            {secondColumnCapabilities.map((cap, i) => (
+              <div
+                key={i}
+                className="jx-cap-tag group relative flex items-center gap-5 px-8 py-6 border-b border-gray-200 last:border-b-0 hover:bg-red-50/40 transition-all duration-500 cursor-default hover:pl-12"
+              >
+                <span
+                  className="flex-shrink-0 w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-400 group-hover:border-red-300 group-hover:text-red-500 group-hover:scale-110 transition-all duration-300"
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >
+                  {String(i + 5).padStart(2, '0')}
+                </span>
+                <span className="text-lg font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
+                  {cap}
+                </span>
+                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-red-500 group-hover:scale-150 transition-all duration-300 flex-shrink-0" />
+                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-red-500 scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -368,7 +394,7 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
         <div>
           <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-red-400 mb-2 flex items-center gap-2">
             <span className="inline-block w-6 h-px bg-red-400" />
-            Jasper X — {t(language, 'Loyalty AI Cutting System', 'Sistema de Corte Loyalty AI', 'Sistema de Corte Loyalty AI')}
+            Jasper X — {t(language, 'AI Cutting System', 'Sistema de Corte AI', 'Sistema de Corte AI')}
           </p>
           <h3 className="text-white font-black text-2xl sm:text-3xl leading-tight" style={{ letterSpacing: '-0.02em' }}>
             {t(
@@ -382,9 +408,8 @@ export const JasperXSection = ({ language }: JasperXSectionProps) => {
         
         <div className="flex-shrink-0 flex flex-wrap gap-4 text-center">
           {[
-            { n: '11', u: t(language, 'Cutting Modes', 'Modos de Corte', 'Modos de Corte') },
+            { n: '7', u: t(language, 'Cutting Modes', 'Modos de Corte', 'Modos de Corte') },
             { n: '0.5mm', u: t(language, 'Vision Acc.', 'Precisión', 'Precisão') },
-            { n: '2000', u: 'FPS' },
           ].map(({ n, u }) => (
             <div key={u} className="jx-bottom-stat relative px-6 py-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-default group/stat">
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover/stat:opacity-100 transition-opacity duration-500" />
