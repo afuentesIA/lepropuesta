@@ -40,6 +40,21 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
       ]
     },
     {
+      id: 'jasper-x',
+      title: {
+        en: 'Robotic Cutter',
+        es: 'Cortadora robótica'
+      },
+      description: {
+        en: 'AI-powered cutting robot for precision operations in narrow spaces',
+        es: 'Robot de corte con IA para operaciones de precisión en espacios reducidos',
+        pt: 'Robô de corte com IA para operações de precisão em espaços reduzidos'
+      },
+      images: [
+        './img/Jasper_X.png'
+      ]
+    },
+    {
       id: 'robotic-stations',
       title: {
         en: 'Robotic Stations',
@@ -111,7 +126,6 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
 
   return (
     <section ref={sectionRef} className="py-32 bg-white relative overflow-hidden">
-      {/* Fondo blanco con efecto de luz sutil */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-50/50 rounded-full blur-[128px]" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-50/50 rounded-full blur-[128px]" />
@@ -146,7 +160,7 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
 
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8"
         >
           {categories.map((category, index) => (
             <div key={category.id} className="category-card-wrapper">
