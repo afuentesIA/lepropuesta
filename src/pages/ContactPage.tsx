@@ -41,7 +41,7 @@ export const ContactPage = ({ language }: ContactPageProps) => {
         ease: 'power3.out',
       });
 
-      // Animación mejorada para las tarjetas de oficinas - más rápida y fluida
+      // Animación para las tarjetas de oficinas - ahora con 3 columnas
       gsap.utils.toArray('.office-card').forEach((card, index) => {
         gsap.from(card as Element, {
           scrollTrigger: {
@@ -49,7 +49,7 @@ export const ContactPage = ({ language }: ContactPageProps) => {
             start: 'top 90%',
             end: 'top 70%',
             scrub: 0.3,
-            once: true, // Se ejecuta solo una vez
+            once: true,
           },
           y: 40,
           opacity: 0,
@@ -105,14 +105,14 @@ export const ContactPage = ({ language }: ContactPageProps) => {
       flag: '🇨🇦'
     },
     {
-      country: language === 'en' ? 'Brazil' : language === 'es' ? 'Brasil' : 'Brasil',
-      city: 'São Paulo',
-      address: 'Jundiaí/São Paulo',
-      zip: '',
-      phone: '+55 (54) 99622-5353',
+      country: language === 'en' ? 'United States' : language === 'es' ? 'Estados Unidos' : 'Estados Unidos',
+      city: 'Houston',
+      address: '34370 Sunset Ln',
+      zip: 'Brookshire, TX 77423',
+      phone: '+1 (281) 934-8015',
       email: 'info@lerobotics.ai',
-      image: 'https://images.pexels.com/photos/2868242/pexels-photo-2868242.jpeg?auto=compress&cs=tinysrgb&w=800',
-      flag: '🇧🇷'
+      image: 'https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=800',
+      flag: '🇺🇸'
     },
     {
       country: language === 'en' ? 'Mexico' : language === 'es' ? 'México' : 'México',
@@ -123,17 +123,7 @@ export const ContactPage = ({ language }: ContactPageProps) => {
       email: 'info@lerobotics.ai',
       image: 'https://images.pexels.com/photos/3935702/pexels-photo-3935702.jpeg?auto=compress&cs=tinysrgb&w=800',
       flag: '🇲🇽'
-    },
-    {
-      country: language === 'en' ? 'United States' : language === 'es' ? 'Estados Unidos' : 'Estados Unidos',
-      city: 'Houston',
-      address: '34370 Sunset Ln',
-      zip: 'Brookshire, TX 77423',
-      phone: '+1 (281) 934-8015',
-      email: 'info@lerobotics.ai',
-      image: 'https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=800',
-      flag: '🇺🇸'
-    },
+    }
   ];
 
   return (
@@ -204,15 +194,6 @@ export const ContactPage = ({ language }: ContactPageProps) => {
                       +1 (403) 860-5275
                     </a>
                     <p className="text-gray-600 text-sm sm:text-base">Calgary, Alberta</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <span className="text-xl sm:text-2xl">🇧🇷</span>
-                  <div>
-                    <a href="tel:+5554996225353" className="text-base sm:text-lg font-semibold text-black hover:text-red-600 transition-colors">
-                      +55 (54) 99622-5353
-                    </a>
-                    <p className="text-gray-600 text-sm sm:text-base">São Paulo, Brazil</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl">
@@ -381,7 +362,7 @@ export const ContactPage = ({ language }: ContactPageProps) => {
         </div>
       </section>
 
-      {/* Offices Section - Fondo blanco, tarjetas hueso */}
+      {/* Offices Section - CORREGIDO: 3 tarjetas en una línea */}
       <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
@@ -400,7 +381,8 @@ export const ContactPage = ({ language }: ContactPageProps) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Grid de 3 columnas en pantallas grandes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {offices.map((office, index) => (
               <div
                 key={index}
