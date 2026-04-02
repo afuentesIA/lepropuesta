@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Calendar, MapPin, Users, Play, ChevronRight, ExternalLink, Clock } from 'lucide-react';
+import { Calendar, MapPin, Users, Play, ChevronRight, ExternalLink, Clock, ChevronLeft } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Language } from '../hooks/useLanguage';
@@ -14,14 +14,24 @@ interface NewsPageProps {
 export const NewsPage = ({ language }: NewsPageProps) => {
   const t = translations[language];
   const pageRef = useRef<HTMLDivElement>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const carouselInnerRef = useRef<HTMLDivElement>(null);
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Detectar si es iOS
+  // Detectar si es iOS y desktop
   useEffect(() => {
     const userAgent = window.navigator.userAgent;
     setIsIOS(/iPad|iPhone|iPod/.test(userAgent));
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
   // Hero Data
@@ -50,15 +60,16 @@ export const NewsPage = ({ language }: NewsPageProps) => {
   // Past Events Data (Eventos en los que ya estuvimos)
   const pastEvents = [
     {
+      id: 0,
       category: language === 'en' ? 'MANUFACTURING' : language === 'es' ? 'MANUFACTURA' : 'MANUFATURA',
-      title: language === 'en' ? 'FABTECH 2024' : language === 'es' ? 'FABTECH 2024' : 'FABTECH 2024',
+      title: language === 'en' ? 'FABTECH 2025' : language === 'es' ? 'FABTECH 2025' : 'FABTECH 2025',
       description: language === 'en'
         ? "Successfully showcased our latest robotic vision systems to industry leaders from across North America."
         : language === 'es'
         ? "Exhibimos con éxito nuestros últimos sistemas de visión robótica a líderes de la industria de toda América del Norte."
         : "Apresentamos com sucesso nossos últimos sistemas de visão robótica para líderes do setor de toda a América do Norte.",
       location: 'Chicago, IL',
-      date: 'September 2024',
+      date: 'September 2025',
       image: './img/Banner.png',
       highlights: [
         language === 'en' ? '500+ Industry Visits' : language === 'es' ? '500+ Visitas Industriales' : '500+ Visitas da Indústria',
@@ -67,6 +78,24 @@ export const NewsPage = ({ language }: NewsPageProps) => {
       ]
     },
     {
+      id: 1,
+      category: language === 'en' ? 'TECHNOLOGY' : language === 'es' ? 'TECNOLOGÍA' : 'TECNOLOGIA',
+      title: language === 'en' ? 'Essen Technology Fair' : language === 'es' ? 'Feria Tecnológica Essen' : 'Feira Tecnológica Essen',
+      description: language === 'en'
+        ? "Successfully participated in Germany's premier industrial technology fair, showcasing our latest AI vision systems."
+        : language === 'es'
+        ? "Participamos con éxito en la principal feria tecnológica industrial de Alemania, mostrando nuestros últimos sistemas de visión IA."
+        : "Participamos com sucesso na principal feira tecnológica industrial da Alemanha, apresentando nossos mais recentes sistemas de visão IA.",
+      location: 'Essen, Germany',
+      date: 'November 2024',
+      image: './img/essen.jpg',
+      highlights: [
+        language === 'en' ? 'European Market' : language === 'es' ? 'Mercado Europeo' : 'Mercado Europeu',
+        language === 'en' ? 'Tech Innovation' : language === 'es' ? 'Innovación Tecnológica' : 'Inovação Tecnológica'
+      ]
+    },
+    {
+      id: 2,
       category: language === 'en' ? 'ENERGY INDUSTRY' : language === 'es' ? 'INDUSTRIA ENERGÉTICA' : 'INDÚSTRIA DE ENERGIA',
       title: language === 'en' ? 'Energy Show Calgary' : language === 'es' ? 'Exposición Energía Calgary' : 'Show de Energia Calgary',
       description: language === 'en'
@@ -83,6 +112,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
       ]
     },
     {
+      id: 3,
       category: language === 'en' ? 'INDUSTRIAL' : language === 'es' ? 'INDUSTRIAL' : 'INDUSTRIAL',
       title: language === 'en' ? 'Abu Dhabi Industrial' : language === 'es' ? 'Industrial Abu Dhabi' : 'Industrial Abu Dhabi',
       description: language === 'en'
@@ -100,37 +130,113 @@ export const NewsPage = ({ language }: NewsPageProps) => {
     }
   ];
 
+  // Crear un array infinito para el carrusel (duplicamos muchas veces)
+  // Cada elemento es un objeto con el evento y un ID único para evitar problemas de key
+  const createInfiniteArray = () => {
+    const infiniteArray = [];
+    // Duplicamos 20 veces para tener un carrusel realmente infinito
+    for (let i = 0; i < 20; i++) {
+      pastEvents.forEach(event => {
+        infiniteArray.push({
+          ...event,
+          uniqueId: `${event.id}-${i}`
+        });
+      });
+    }
+    return infiniteArray;
+  };
+
+  const infiniteEvents = createInfiniteArray();
+  const eventsPerView = 3;
+  
+  // Obtener los eventos visibles actualmente
+  const getVisibleEvents = () => {
+    const start = currentIndex;
+    return infiniteEvents.slice(start, start + eventsPerView);
+  };
+
+  const visibleEvents = getVisibleEvents();
+
+  // Función para ir al siguiente grupo
+  const goToNext = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(prev => prev + 1);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 700);
+  };
+
+  // Función para ir al grupo anterior
+  const goToPrev = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex(prev => prev - 1);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 700);
+  };
+
+  // Auto-play
+  const startAutoPlay = () => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    if (!isDesktop) return;
+    
+    autoPlayRef.current = setInterval(() => {
+      goToNext();
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (isDesktop) {
+      // Comenzamos desde el índice 0
+      setCurrentIndex(0);
+      startAutoPlay();
+    }
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [isDesktop]);
+
+  // Calcular qué eventos originales se están mostrando para los indicadores
+  const getOriginalIndices = () => {
+    const visibleOriginalIds = visibleEvents.map(event => event.id);
+    return visibleOriginalIds;
+  };
+
   // Upcoming Events Data (Donde estaremos)
   const upcomingEvents = [
     {
-      category: language === 'en' ? 'TECHNOLOGY' : language === 'es' ? 'TECNOLOGÍA' : 'TECNOLOGIA',
-      title: language === 'en' ? 'Essen Technology Fair' : language === 'es' ? 'Feria Tecnológica Essen' : 'Feira Tecnológica Essen',
+      category: language === 'en' ? 'MANUFACTURING' : language === 'es' ? 'MANUFACTURA' : 'MANUFATURA',
+      title: language === 'en' ? 'FABTECH Vegas 2026' : language === 'es' ? 'FABTECH Vegas 2026' : 'FABTECH Vegas 2026',
       description: language === 'en'
-        ? "Join us at Germany's premier industrial technology fair to discover our latest innovations in AI vision systems."
+        ? "Join us in Las Vegas for North America's largest manufacturing event featuring groundbreaking AI vision solutions."
         : language === 'es'
-        ? "Únase a nosotros en la principal feria tecnológica industrial de Alemania para descubrir nuestras últimas innovaciones en sistemas de visión IA."
-        : "Junte-se a nós na principal feira tecnológica industrial da Alemanha para descobrir nossas últimas inovações em sistemas de visão IA.",
-      location: 'Essen, Germany',
-      date: 'November 2024',
-      image: './img/essen.jpg',
+        ? "Únase a nosotros en Las Vegas para el evento de manufactura más grande de América del Norte con soluciones de visión IA revolucionarias."
+        : "Junte-se a nós em Las Vegas para o maior evento de manufatura da América do Norte com soluções revolucionárias de visão IA.",
+      location: 'Las Vegas, NV',
+      date: 'December 2026',
+      image: './img/vegas.png',
       status: 'confirmed',
       booth: 'A205',
       registerLink: '#'
     },
     {
       category: language === 'en' ? 'MANUFACTURING' : language === 'es' ? 'MANUFACTURA' : 'MANUFATURA',
-      title: language === 'en' ? 'FABTECH 2025' : language === 'es' ? 'FABTECH 2025' : 'FABTECH 2025',
+      title: language === 'en' ? 'FABTECH Canada 2026' : language === 'es' ? 'FABTECH Canadá 2026' : 'FABTECH Canadá 2026',
       description: language === 'en'
-        ? "Returning to North America's largest manufacturing event with groundbreaking AI vision solutions."
+        ? "Join us in Toronto for Canada's premier manufacturing exhibition featuring advanced welding automation."
         : language === 'es'
-        ? "Regresamos al evento de manufactura más grande de América del Norte con soluciones de visión IA revolucionarias."
-        : "Retornamos ao maior evento de manufatura da América do Norte com soluções revolucionárias de visão IA.",
-      location: 'Chicago, IL',
-      date: 'September 2025',
-      image: './img/Banner.png',
+        ? "Únase a nosotros en Toronto para la principal exposición de manufactura de Canadá con automatización de soldadura avanzada."
+        : "Junte-se a nós em Toronto para a principal exposição de manufatura do Canadá com automação de soldagem avançada.",
+      location: 'Canada',
+      date: 'Coming Soon',
+      image: './img/canada.webp',
       status: 'planned',
       booth: 'B15063',
-      registerLink: 'https://www.xpressreg.net/register/fabt0925/landing.asp'
+      registerLink: '#'
     },
     {
       category: language === 'en' ? 'VIRTUAL' : language === 'es' ? 'VIRTUAL' : 'VIRTUAL',
@@ -212,31 +318,19 @@ export const NewsPage = ({ language }: NewsPageProps) => {
         delay: 0.6,
       });
 
-      // Section animations
-      gsap.utils.toArray('.section-title').forEach((title) => {
-        gsap.from(title as Element, {
-          scrollTrigger: {
-            trigger: title as Element,
-            start: 'top 85%',
-            end: 'top 60%',
-            scrub: 1,
-          },
-          y: 50,
-          opacity: 0,
-        });
-      });
-
-      gsap.utils.toArray('.event-card, .live-card').forEach((card) => {
+      // Animación para las tarjetas
+      gsap.utils.toArray('.event-card, .live-card, .upcoming-card').forEach((card) => {
         gsap.from(card as Element, {
           scrollTrigger: {
             trigger: card as Element,
-            start: 'top 80%',
-            end: 'top 50%',
-            scrub: 1,
+            start: 'top 90%',
+            end: 'top 70%',
+            scrub: 0.2,
+            once: true
           },
-          y: 60,
+          y: 30,
           opacity: 0,
-          duration: 0.8,
+          duration: 0.5
         });
       });
     }, pageRef);
@@ -246,9 +340,8 @@ export const NewsPage = ({ language }: NewsPageProps) => {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-white">
-      {/* Hero Section con imagen tenue - Versión específica para iOS */}
+      {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative min-h-screen flex items-center overflow-hidden">
-        {/* Fondo con imagen */}
         <div 
           className="absolute inset-0"
           style={{
@@ -291,88 +384,198 @@ export const NewsPage = ({ language }: NewsPageProps) => {
         </div>
       </section>
 
-      {/* Past Events Section - Fondo blanco, tarjetas hueso */}
+      {/* Past Events Section - Carrusel infinito REAL */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="section-title text-5xl sm:text-6xl font-bold text-black text-center mb-16">
             {language === 'en' ? 'Where We\'ve Been' : language === 'es' ? 'Donde Hemos Estado' : 'Onde Estivemos'}
           </h2>
           
-          <div className="grid lg:grid-cols-3 gap-8">
-            {pastEvents.map((event, index) => (
-              <div key={index} className="event-card group cursor-pointer">
-                <div className="bg-stone-50 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-stone-200">
-                  <div className="relative aspect-video overflow-hidden">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-black/80 text-white text-xs font-semibold rounded-full backdrop-blur-sm">
-                        {event.category}
-                      </span>
-                    </div>
-                    <div className="absolute top-4 right-4">
-                      <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full shadow-md">
-                        {language === 'en' ? 'COMPLETED' : language === 'es' ? 'COMPLETADO' : 'CONCLUÍDO'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-black mb-3">{event.title}</h3>
-                    <p className="text-stone-600 mb-4 leading-relaxed">{event.description}</p>
-                    
-                    <div className="flex items-center gap-4 text-sm text-red-600 mb-4">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        <span>{event.location}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>{event.date}</span>
-                      </div>
-                    </div>
+          {isDesktop ? (
+            // Carrusel infinito real para desktop
+            <div className="relative px-12">
+              <div className="overflow-hidden">
+                <div 
+                  ref={carouselInnerRef}
+                  className="flex transition-transform duration-700 ease-out gap-8"
+                >
+                  {visibleEvents.map((event) => (
+                    <div key={event.uniqueId} className="w-1/3 flex-shrink-0 event-card group cursor-pointer">
+                      <div className="bg-stone-50 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-stone-200 h-full">
+                        <div className="relative aspect-video overflow-hidden">
+                          <img
+                            src={event.image}
+                            alt={event.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div className="absolute top-4 left-4">
+                            <span className="px-3 py-1 bg-black/80 text-white text-xs font-semibold rounded-full backdrop-blur-sm">
+                              {event.category}
+                            </span>
+                          </div>
+                          <div className="absolute top-4 right-4">
+                            <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full shadow-md">
+                              {language === 'en' ? 'COMPLETED' : language === 'es' ? 'COMPLETADO' : 'CONCLUÍDO'}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold text-black mb-3">{event.title}</h3>
+                          <p className="text-stone-600 mb-4 leading-relaxed line-clamp-2">{event.description}</p>
+                          
+                          <div className="flex items-center gap-4 text-sm text-red-600 mb-4">
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              <span>{event.location}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              <span>{event.date}</span>
+                            </div>
+                          </div>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {event.highlights.map((highlight, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full"
-                        >
-                          {highlight}
-                        </span>
-                      ))}
-                    </div>
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {event.highlights.map((highlight, hIdx) => (
+                              <span
+                                key={hIdx}
+                                className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full"
+                              >
+                                {highlight}
+                              </span>
+                            ))}
+                          </div>
 
-                    <button className="w-full py-3 border-2 border-red-200 text-red-600 font-semibold rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300">
-                      {language === 'en' ? 'View Recap' : language === 'es' ? 'Ver Resumen' : 'Ver Resumo'}
-                    </button>
-                  </div>
+                          <button className="w-full py-3 border-2 border-red-200 text-red-600 font-semibold rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300">
+                            {language === 'en' ? 'View Recap' : language === 'es' ? 'Ver Resumen' : 'Ver Resumo'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Botones de navegación */}
+              <button
+                onClick={goToPrev}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg border border-stone-200 flex items-center justify-center hover:bg-red-50 hover:border-red-300 transition-all duration-300 z-10"
+              >
+                <ChevronLeft className="w-6 h-6 text-stone-600" />
+              </button>
+              <button
+                onClick={goToNext}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg border border-stone-200 flex items-center justify-center hover:bg-red-50 hover:border-red-300 transition-all duration-300 z-10"
+              >
+                <ChevronRight className="w-6 h-6 text-stone-600" />
+              </button>
+
+              {/* Indicadores - muestran qué combinación de eventos se está viendo */}
+              <div className="flex justify-center gap-2 mt-8">
+                {pastEvents.map((_, index) => {
+                  const visibleIds = getOriginalIndices();
+                  const isActive = visibleIds.includes(index);
+                  return (
+                    <button
+                      key={index}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        isActive
+                          ? 'w-8 bg-red-600'
+                          : 'w-2 bg-stone-300 hover:bg-stone-400'
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            // Grid normal para móvil
+            <div className="grid md:grid-cols-2 gap-8">
+              {pastEvents.map((event, index) => (
+                <div key={index} className="event-card group cursor-pointer">
+                  <div className="bg-stone-50 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-stone-200">
+                    <div className="relative aspect-video overflow-hidden">
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1 bg-black/80 text-white text-xs font-semibold rounded-full backdrop-blur-sm">
+                          {event.category}
+                        </span>
+                      </div>
+                      <div className="absolute top-4 right-4">
+                        <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full shadow-md">
+                          {language === 'en' ? 'COMPLETED' : language === 'es' ? 'COMPLETADO' : 'CONCLUÍDO'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-black mb-3">{event.title}</h3>
+                      <p className="text-stone-600 mb-4 leading-relaxed">{event.description}</p>
+                      
+                      <div className="flex items-center gap-4 text-sm text-red-600 mb-4">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-4 h-4" />
+                          <span>{event.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          <span>{event.date}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {event.highlights.map((highlight, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full"
+                          >
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+
+                      <button className="w-full py-3 border-2 border-red-200 text-red-600 font-semibold rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300">
+                        {language === 'en' ? 'View Recap' : language === 'es' ? 'Ver Resumen' : 'Ver Resumo'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Upcoming Events Section - Fondo blanco, tarjetas hueso */}
+      {/* Upcoming Events Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="section-title text-5xl sm:text-6xl font-bold text-black text-center mb-16">
             {language === 'en' ? 'Where We\'ll Be' : language === 'es' ? 'Donde Estaremos' : 'Onde Estaremos'}
           </h2>
           
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {upcomingEvents.map((event, index) => (
-              <div key={index} className="event-card group cursor-pointer">
+              <div key={index} className="group cursor-pointer">
                 <div className="bg-stone-50 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border-2 border-stone-200 hover:border-red-500">
                   <div className="relative aspect-video overflow-hidden">
                     <img
                       src={event.image}
                       alt={event.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+                          `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+                            <rect width="400" height="300" fill="#f5f5f4"/>
+                            <rect x="50" y="50" width="300" height="200" fill="#e7e5e4" rx="10"/>
+                            <text x="200" y="170" font-family="Arial" font-size="20" fill="#444" text-anchor="middle">${event.title}</text>
+                          </svg>`
+                        );
+                      }}
                     />
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full shadow-md">
@@ -429,7 +632,7 @@ export const NewsPage = ({ language }: NewsPageProps) => {
         </div>
       </section>
 
-      {/* Live Stream Section - Fondo blanco, tarjetas hueso */}
+      {/* Live Stream Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="section-title text-5xl sm:text-6xl font-bold text-black text-center mb-16">
