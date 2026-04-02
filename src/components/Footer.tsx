@@ -20,7 +20,7 @@ export const Footer = ({ language }: FooterProps) => {
               <img
                 src="/img/Logo.png"
                 alt="LE Robotics"
-                className="h-16"
+                className="h-28"
               />
             </Link>
             <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
