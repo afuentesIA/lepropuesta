@@ -358,7 +358,6 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
     { value: 'canada', label: language === 'en' ? 'Canada' : language === 'es' ? 'Canadá' : 'Canadá' },
     { value: 'usa', label: language === 'en' ? 'United States' : language === 'es' ? 'Estados Unidos' : 'Estados Unidos' },
     { value: 'mexico', label: language === 'en' ? 'Mexico' : language === 'es' ? 'México' : 'México' },
-    { value: 'brazil', label: language === 'en' ? 'Brazil' : language === 'es' ? 'Brasil' : 'Brasil' },
     { value: 'other', label: language === 'en' ? 'Other Country' : language === 'es' ? 'Otro País' : 'Outro País' },
   ];
 
@@ -836,24 +835,24 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section ref={contactRef} className="py-32 bg-gray-50 relative overflow-hidden">
+      {/* Contact Section - Minimal space between elements */}
+      <section ref={contactRef} className="py-12 sm:py-32 bg-gray-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-16">
-            <div className="inline-block mb-4">
-              <span className="text-red-600 text-xl font-semibold tracking-wide uppercase px-6 py-2 border border-red-200 rounded-full bg-red-50">
+          <div className="text-center mb-2 sm:mb-16">
+            <div className="inline-block mb-2 sm:mb-4">
+              <span className="text-red-600 text-base sm:text-xl font-semibold tracking-wide uppercase px-4 sm:px-6 py-1 sm:py-2 border border-red-200 rounded-full bg-red-50">
                 {language === 'en' ? 'Get In Touch' : language === 'es' ? 'Contáctanos' : 'Entre em Contato'}
               </span>
             </div>
-            <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-1 sm:mb-6 tracking-tight">
               <span className="text-black">
                 {language === 'en' ? "Let's Build Your" : language === 'es' ? 'Construyamos tu' : 'Vamos Construir sua'}
               </span>
-              <span className="block text-red-600 mt-4">
+              <span className="block text-red-600 mt-0 sm:mt-4">
                 {language === 'en' ? 'Solution' : language === 'es' ? 'Solución' : 'Solução'}
               </span>
             </h2>
-            <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed px-4 mt-0 sm:mt-2">
               {language === 'en'
                 ? 'Talk to an engineer. Tell us about your production challenges'
                 : language === 'es'
@@ -862,79 +861,79 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-20 items-start">
-            <div className="space-y-12">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-20 items-start">
+            <div className="space-y-4 sm:space-y-12">
               <div className="contact-item">
-                <h3 className="text-3xl font-bold text-black mb-8 tracking-tight">
+                <h3 className="text-2xl sm:text-3xl font-bold text-black mb-3 sm:mb-8 tracking-tight">
                   {language === 'en' ? 'Global Offices' : language === 'es' ? 'Oficinas Globales' : 'Escritórios Globais'}
                 </h3>
                 
-                <div className="space-y-6">
-                  <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center">
-                        <MapPin className="w-6 h-6 text-white" />
+                <div className="space-y-3 sm:space-y-6">
+                  <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xl font-semibold text-black mb-3">
+                        <h4 className="text-base sm:text-xl font-semibold text-black mb-1 sm:mb-3">
                           {language === 'en' ? 'Canada Headquarters' : language === 'es' ? 'Oficina Central Canadá' : 'Escritório Central Canadá'}
                         </h4>
-                        <p className="text-gray-600 leading-relaxed mb-3">
+                        <p className="text-xs sm:text-base text-gray-600 leading-relaxed mb-1 sm:mb-3">
                           1000, 639 5th Ave SW<br />
                           Calgary, AB T2P 0M9
                         </p>
-                        <div className="flex items-center gap-2 text-red-600 font-medium">
-                          <Phone className="w-4 h-4" />
+                        <div className="flex items-center gap-2 text-red-600 font-medium text-xs sm:text-base">
+                          <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
                           <span>+1 403-860-5275</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center">
-                        <MapPin className="w-6 h-6 text-white" />
+                  <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xl font-semibold text-black mb-4">
+                        <h4 className="text-base sm:text-xl font-semibold text-black mb-2 sm:mb-4">
                           {language === 'en' ? 'Global Offices' : language === 'es' ? 'Oficinas Globales' : 'Escritórios Globais'}
                         </h4>
-                        <div className="space-y-4">
+                        <div className="space-y-2 sm:space-y-4">
                           <div>
-                            <h5 className="font-semibold text-black mb-1">
+                            <h5 className="font-semibold text-black mb-0.5 sm:mb-1 text-xs sm:text-base">
                               {language === 'en' ? 'Mexico' : language === 'es' ? 'México' : 'México'}
                             </h5>
-                            <p className="text-gray-600 text-sm">Ave. Constitucion 2050, Mty. NL.</p>
+                            <p className="text-gray-600 text-xs sm:text-sm">Ave. Constitucion 2050, Mty. NL.</p>
                           </div>
                           <div>
-                            <h5 className="font-semibold text-black mb-1">
+                            <h5 className="font-semibold text-black mb-0.5 sm:mb-1 text-xs sm:text-base">
                               {language === 'en' ? 'Houston' : 'Houston'}
                             </h5>
-                            <p className="text-gray-600 text-sm">34370 Sunset Ln, Brookshire, TX 77423</p>
+                            <p className="text-gray-600 text-xs sm:text-sm">34370 Sunset Ln, Brookshire, TX 77423</p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-700 rounded-2xl flex items-center justify-center">
-                        <Mail className="w-6 h-6 text-white" />
+                  <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-gray-600 to-gray-700 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <Mail className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xl font-semibold text-black mb-3">
+                        <h4 className="text-base sm:text-xl font-semibold text-black mb-1 sm:mb-3">
                           {language === 'en' ? 'International Email' : language === 'es' ? 'Correo Internacional' : 'E-mail Internacional'}
                         </h4>
-                        <p className="text-gray-600 leading-relaxed mb-3">
+                        <p className="text-xs sm:text-base text-gray-600 leading-relaxed mb-1 sm:mb-3">
                           {language === 'en' 
-                            ? 'Available in English, Spanish, and Portuguese' 
+                            ? 'Available in English and Spanish' 
                             : language === 'es' 
                             ? 'Disponible en inglés, español y portugués' 
                             : 'Disponível em inglês, espanhol e português'}
                         </p>
-                        <div className="text-red-600 font-medium">
+                        <div className="text-red-600 font-medium text-xs sm:text-base">
                           info@lerobotics.ai
                         </div>
                       </div>
@@ -945,13 +944,13 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
             </div>
 
             <div className="contact-item">
-              <div className="bg-white rounded-[2.5rem] p-12 shadow-sm border border-gray-100">
-                <form className="space-y-6">
+              <div className="bg-white rounded-2xl sm:rounded-[2.5rem] p-4 sm:p-8 md:p-12 shadow-sm border border-gray-100">
+                <form className="space-y-3 sm:space-y-6">
                   <div>
-                    <label className="block text-lg font-medium text-black mb-4">
+                    <label className="block text-sm sm:text-lg font-medium text-black mb-2 sm:mb-4">
                       {language === 'en' ? 'Your Country' : language === 'es' ? 'Tu País' : 'Seu País'}
                     </label>
-                    <select className="w-full px-6 py-5 bg-gray-50 border-0 rounded-2xl text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 appearance-none">
+                    <select className="w-full px-4 sm:px-6 py-3 sm:py-5 bg-gray-50 border-0 rounded-xl sm:rounded-2xl text-sm sm:text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 appearance-none">
                       <option value="">
                         {language === 'en' ? 'Select Country' : language === 'es' ? 'Seleccionar País' : 'Selecionar País'}
                       </option>
@@ -963,38 +962,38 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                     </select>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid sm:grid-cols-2 gap-3 sm:gap-6">
                     <div>
-                      <label className="block text-lg font-medium text-black mb-4">
+                      <label className="block text-sm sm:text-lg font-medium text-black mb-2 sm:mb-4">
                         {language === 'en' ? 'Name' : language === 'es' ? 'Nombre' : 'Nome'}
                       </label>
                       <input
                         type="text"
                         placeholder={language === 'en' ? 'Your name' : language === 'es' ? 'Tu nombre' : 'Seu nome'}
-                        className="w-full px-6 py-5 bg-gray-50 border-0 rounded-2xl text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200"
+                        className="w-full px-4 sm:px-6 py-3 sm:py-5 bg-gray-50 border-0 rounded-xl sm:rounded-2xl text-sm sm:text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200"
                       />
                     </div>
                     <div>
-                      <label className="block text-lg font-medium text-black mb-4">
+                      <label className="block text-sm sm:text-lg font-medium text-black mb-2 sm:mb-4">
                         {language === 'en' ? 'Email Address' : language === 'es' ? 'Correo Electrónico' : 'E-mail'}
                       </label>
                       <input
                         type="email"
                         placeholder={language === 'en' ? 'your@email.com' : language === 'es' ? 'tu@email.com' : 'seu@email.com'}
-                        className="w-full px-6 py-5 bg-gray-50 border-0 rounded-2xl text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200"
+                        className="w-full px-4 sm:px-6 py-3 sm:py-5 bg-gray-50 border-0 rounded-xl sm:rounded-2xl text-sm sm:text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-lg font-medium text-black mb-4">
+                    <label className="block text-sm sm:text-lg font-medium text-black mb-2 sm:mb-4">
                       {language === 'en' 
                         ? "I'm interested in:" 
                         : language === 'es' 
                         ? 'Estoy interesado en:' 
                         : 'Estou interessado em:'}
                     </label>
-                    <select className="w-full px-6 py-5 bg-gray-50 border-0 rounded-2xl text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 appearance-none">
+                    <select className="w-full px-4 sm:px-6 py-3 sm:py-5 bg-gray-50 border-0 rounded-xl sm:rounded-2xl text-sm sm:text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 appearance-none">
                       <option value="">
                         {language === 'en' 
                           ? 'Robotic welding demo, training, etc.' 
@@ -1011,7 +1010,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                   </div>
 
                   <div>
-                    <label className="block text-lg font-medium text-black mb-4">
+                    <label className="block text-sm sm:text-lg font-medium text-black mb-2 sm:mb-4">
                       {language === 'en' ? 'Message' : language === 'es' ? 'Mensaje' : 'Mensagem'}
                     </label>
                     <textarea
@@ -1020,14 +1019,14 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                         : language === 'es' 
                         ? 'Cuéntanos sobre tus necesidades de automatización de soldadura...' 
                         : 'Conte-nos sobre suas necessidades de automação de soldagem...'}
-                      rows={4}
-                      className="w-full px-6 py-5 bg-gray-50 border-0 rounded-2xl text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 resize-none"
+                      rows={3}
+                      className="w-full px-4 sm:px-6 py-3 sm:py-5 bg-gray-50 border-0 rounded-xl sm:rounded-2xl text-sm sm:text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-6 bg-gradient-to-r from-red-600 to-red-500 text-white text-xl font-semibold rounded-2xl hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(220,38,38,0.3)] active:scale-95"
+                    className="w-full py-3 sm:py-6 bg-gradient-to-r from-red-600 to-red-500 text-white text-base sm:text-xl font-semibold rounded-xl sm:rounded-2xl hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(220,38,38,0.3)] active:scale-95"
                   >
                     {language === 'en'
                       ? 'Talk to an Engineer'
