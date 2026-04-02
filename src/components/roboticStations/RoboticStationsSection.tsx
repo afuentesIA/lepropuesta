@@ -21,7 +21,7 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
     {
       id: 'track-type',
       name: language === 'en' ? 'Track Type' : language === 'es' ? 'Tipo Pista' : 'Tipo Pista',
-      model: 'TrackWeld Station',a
+      model: 'TrackWeld Station',
       specs: '7 Axis Control',
       description: language === 'en'
         ? 'Precision track-based welding station with servo axis control for consistent, high-quality welds on long structures and assemblies.'
