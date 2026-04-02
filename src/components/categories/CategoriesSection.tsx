@@ -43,11 +43,12 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
       id: 'jasper-x',
       title: {
         en: 'Robotic Cutter',
-        es: 'Cortadora robótica'
+        es: 'Cortadora robótica',
+        pt: 'Cortadora Robótica' 
       },
       description: {
-        en: 'AI-powered cutting robot for precision operations in narrow spaces',
-        es: 'Robot de corte con IA para operaciones de precisión en espacios reducidos',
+        en: 'AI-powered cutting robot for precision operations',
+        es: 'Robot de corte con IA para operaciones de precisión',
         pt: 'Robô de corte com IA para operações de precisão em espaços reduzidos'
       },
       images: [
