@@ -55,79 +55,95 @@ export const AboutPage = ({ language }: AboutPageProps) => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero sequence animation
+      // Hero sequence animation - más rápida
       const tl = gsap.timeline();
       tl.from('.hero-badge', {
-        y: 30,
+        y: 20,
         opacity: 0,
-        duration: 1,
-        ease: 'power3.out'
+        duration: 0.6,
+        ease: 'power2.out'
       })
       .from('.hero-title', {
-        y: 80,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out'
-      }, '-=0.3')
-      .from('.hero-description', {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out'
-      }, '-=0.6')
-      .from('.hero-cta', {
         y: 40,
         opacity: 0,
         duration: 0.8,
-        ease: 'power3.out'
-      }, '-=0.4');
+        ease: 'power2.out'
+      }, '-=0.2')
+      .from('.hero-description', {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out'
+      }, '-=0.3')
+      .from('.hero-cta', {
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power2.out'
+      }, '-=0.2');
 
-      // Process steps animation
+      // Process steps animation - más rápida y sin scrub
       gsap.utils.toArray('.process-step').forEach((step, index) => {
         gsap.from(step as Element, {
           scrollTrigger: {
             trigger: step as Element,
-            start: 'top 85%',
-            end: 'top 50%',
-            scrub: 1,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
           },
-          y: 60,
+          y: 30,
           opacity: 0,
-          duration: 1.2,
-          delay: index * 0.1,
+          duration: 0.5,
+          delay: index * 0.05,
+          ease: 'power2.out'
         });
       });
 
-      // Global presence cards
+      // Global presence cards - más rápida y sin scrub
       gsap.utils.toArray('.location-card').forEach((card, index) => {
         gsap.from(card as Element, {
           scrollTrigger: {
             trigger: card as Element,
-            start: 'top 80%',
-            end: 'top 50%',
-            scrub: 1,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
           },
-          y: 80,
+          y: 30,
           opacity: 0,
-          duration: 1.4,
-          delay: index * 0.1,
+          duration: 0.5,
+          delay: index * 0.08,
+          ease: 'power2.out'
         });
       });
 
-      // Advantages cards
+      // Technology cards - más rápida y sin scrub
+      gsap.utils.toArray('.tech-card').forEach((card, index) => {
+        gsap.from(card as Element, {
+          scrollTrigger: {
+            trigger: card as Element,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.5,
+          delay: index * 0.08,
+          ease: 'power2.out'
+        });
+      });
+
+      // Advantages cards - más rápida y sin scrub
       gsap.utils.toArray('.advantage-card').forEach((card, index) => {
         gsap.from(card as Element, {
           scrollTrigger: {
             trigger: card as Element,
-            start: 'top 85%',
-            end: 'top 55%',
-            scrub: 1,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
           },
-          y: 60,
+          y: 30,
           opacity: 0,
-          scale: 0.9,
-          duration: 1.2,
-          delay: index * 0.15,
+          scale: 0.95,
+          duration: 0.5,
+          delay: index * 0.1,
+          ease: 'power2.out'
         });
       });
 
@@ -140,6 +156,8 @@ export const AboutPage = ({ language }: AboutPageProps) => {
     {
       flag: 'https://flagcdn.com/w160/ca.png',
       title: language === 'en' ? 'LE Robotics Canada' : language === 'es' ? 'LE Robotics Canadá' : 'LE Robotics Canadá',
+      headOffice: language === 'en' ? 'Head Office: Calgary' : language === 'es' ? 'Oficina Principal: Calgary' : 'Escritório Principal: Calgary',
+      fabricationShop: language === 'en' ? 'Fabrication Shop: Grande Prairie' : language === 'es' ? 'Taller de Fabricación: Grande Prairie' : 'Oficina de Fabricação: Grande Prairie',
       location: 'Grande Prairie, Alberta',
       description: language === 'en'
         ? 'Strategic hub for Western Canadian operations, delivering cutting-edge AI welding technology to the thriving oil and gas sector.'
@@ -166,16 +184,6 @@ export const AboutPage = ({ language }: AboutPageProps) => {
         : language === 'es'
         ? 'Puerta de entrada al crecimiento industrial de América Latina, implementando tecnología humanoide avanzada y soluciones IA para transformar la manufactura.'
         : 'Porta de entrada para o crescimento industrial da América Latina, implantando tecnologia humanoide avançada e soluções IA para transformar a manufatura.'
-    },
-    {
-      flag: 'https://flagcdn.com/w160/br.png',
-      title: language === 'en' ? 'LE Robotics Brazil' : language === 'es' ? 'LE Robotics Brasil' : 'LE Robotics Brasil',
-      location: 'São Paulo',
-      description: language === 'en'
-        ? 'Serving South America\'s largest market with cutting-edge welding automation for petroleum, mining, and heavy manufacturing sectors.'
-        : language === 'es'
-        ? 'Atendiendo al mercado más grande de Sudamérica con automatización de soldadura de vanguardia para los sectores de petróleo, minería y fabricación pesada.'
-        : 'Atendendo o maior mercado da América do Sul com automação de soldagem de ponta para os setores de petróleo, mineração e manufatura pesada.'
     }
   ];
 
@@ -193,10 +201,10 @@ export const AboutPage = ({ language }: AboutPageProps) => {
       icon: <Cpu className="w-7 h-7" />,
       title: language === 'en' ? 'LE Robotics AI Solutions' : language === 'es' ? 'Soluciones IA LE Robotics' : 'Soluções IA LE Robotics',
       description: language === 'en'
-        ? 'Artificial intelligence integration that optimizes welding parameters and ensures consistent quality.'
+        ? 'Artificial intelligence integration that optimizes programming time and ensures consistent quality.'
         : language === 'es'
-        ? 'Integración de inteligencia artificial que optimiza los parámetros de soldadura y garantiza calidad consistente.'
-        : 'Integração de inteligência artificial que otimiza parâmetros de soldagem e garante qualidade consistente.'
+        ? 'Integración de inteligencia artificial que optimiza el tiempo de programación y garantiza calidad consistente.'
+        : 'Integração de inteligência artificial que otimiza o tempo de programação e garante qualidade consistente.'
     },
     {
       icon: <Wrench className="w-7 h-7" />,
@@ -206,15 +214,6 @@ export const AboutPage = ({ language }: AboutPageProps) => {
         : language === 'es'
         ? 'Soluciones integrales de automatización que transforman los procesos de soldadura tradicionales en operaciones inteligentes.'
         : 'Soluções abrangentes de automação que transformam processos de soldagem tradicionais em operações inteligentes.'
-    },
-    {
-      icon: <Users className="w-7 h-7" />,
-      title: language === 'en' ? 'LE Robotics Humanoid Technology' : language === 'es' ? 'Tecnología Humanoide LE Robotics' : 'Tecnologia Humanoide LE Robotics',
-      description: language === 'en'
-        ? 'Next-generation humanoid robotics designed to work alongside human operators in complex scenarios.'
-        : language === 'es'
-        ? 'Robótica humanoide de próxima generación diseñada para trabajar junto con operadores humanos en escenarios complejos.'
-        : 'Robótica humanoide de próxima geração projetada para trabalhar junto com operadores humanos em cenários complexos.'
     }
   ];
 
@@ -384,10 +383,10 @@ export const AboutPage = ({ language }: AboutPageProps) => {
           <div className="bg-gray-50 rounded-3xl p-12">
             <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed text-center max-w-5xl mx-auto font-light">
               {language === 'en'
-                ? 'The burgeoning oil and gas industry demands a relentless supply of high-quality pressure pipe and equipment fabrication. Our AI-automated welding process is meticulously engineered to address this critical need, delivering exceptional quality and surpassing traditional production speeds.'
+                ? 'The oil and gas industry demands high-quality pressure pipe and equipment fabrication. Our AI-automated welding process is precisely engineered to meet this critical need, delivering exceptional quality and surpassing traditional production speeds.'
                 : language === 'es'
-                ? 'La creciente industria del petróleo y gas demanda un suministro constante de tuberías de presión de alta calidad y fabricación de equipos. Nuestro proceso de soldadura automatizado con IA está meticulosamente diseñado para satisfacer esta necesidad crítica, ofreciendo calidad excepcional y superando las velocidades de producción tradicionales.'
-                : 'A crescente indústria de petróleo e gás exige um fornecimento constante de tubulações de pressão de alta qualidade e fabricação de equipamentos. Nosso processo de soldagem automatizado com IA é meticulosamente projetado para atender a essa necessidade crítica, oferecendo qualidade excepcional e superando as velocidades de produção tradicionais.'}
+                ? 'La industria del petróleo y gas demanda fabricación de tuberías a presión y equipos de alta calidad. Nuestro proceso de soldadura automatizado con IA está diseñado con precisión para satisfacer esta necesidad crítica, ofreciendo calidad excepcional y superando las velocidades de producción tradicionales.'
+                : 'A indústria de petróleo e gás demanda fabricação de tubulações de pressão e equipamentos de alta qualidade. Nosso processo de soldagem automatizado com IA é projetado com precisão para atender a essa necessidade crítica, oferecendo qualidade excepcional e superando as velocidades de produção tradicionais.'}
             </p>
           </div>
         </div>
@@ -408,7 +407,7 @@ export const AboutPage = ({ language }: AboutPageProps) => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {globalPresence.map((location, index) => (
               <div
                 key={index}
@@ -431,7 +430,21 @@ export const AboutPage = ({ language }: AboutPageProps) => {
                   {location.title}
                 </h3>
                 
-                <p className="text-red-500 font-semibold mb-4 text-lg">{location.location}</p>
+                {/* Mostrar Head Office y Fabrication Shop solo para Canadá */}
+                {location.headOffice && location.fabricationShop && (
+                  <div className="mb-4 space-y-2">
+                    <p className="text-red-500 font-semibold text-sm">
+                      {location.headOffice}
+                    </p>
+                    <p className="text-red-500 font-semibold text-sm">
+                      {location.fabricationShop}
+                    </p>
+                  </div>
+                )}
+                
+                {!location.headOffice && (
+                  <p className="text-red-500 font-semibold mb-4 text-lg">{location.location}</p>
+                )}
                 
                 <p className="text-gray-600 leading-relaxed">
                   {location.description}
@@ -440,31 +453,34 @@ export const AboutPage = ({ language }: AboutPageProps) => {
             ))}
           </div>
 
-          {/* Technology & Innovation */}
-          <div className="bg-white rounded-3xl p-12 shadow-xl">
-            <div className="text-center mb-16">
-              <h3 className="text-4xl sm:text-5xl font-bold text-black mb-6 tracking-tight">
+          {/* Technology & Innovation - Versión responsive con tarjetas en móvil */}
+          <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-xl mt-20">
+            <div className="text-center mb-12 sm:mb-16">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4 sm:mb-6 tracking-tight">
                 {language === 'en' ? 'Technology & Innovation' : language === 'es' ? 'Tecnología e Innovación' : 'Tecnologia e Inovação'}
               </h3>
             </div>
             
-            <div className="grid gap-8">
+            {/* Grid de tarjetas para móvil y escritorio */}
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
               {expertiseItems.map((item, index) => (
                 <div
                   key={index}
-                  className="expertise-item flex items-start gap-8 p-8 rounded-2xl hover:bg-gray-50 transition-all duration-500 border border-gray-100"
+                  className="tech-card group bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-red-200"
                 >
-                  <div className="flex-shrink-0 w-16 h-16 bg-red-500 rounded-2xl text-white flex items-center justify-center shadow-lg">
-                    {item.icon}
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h4 className="text-2xl font-bold text-black mb-4 tracking-tight">
-                      {item.title}
-                    </h4>
-                    <p className="text-gray-600 leading-relaxed text-lg">
-                      {item.description}
-                    </p>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                    <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-red-500 rounded-xl sm:rounded-2xl text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      {item.icon}
+                    </div>
+                    
+                    <div className="flex-1">
+                      <h4 className="text-xl sm:text-2xl font-bold text-black mb-2 sm:mb-3 tracking-tight">
+                        {item.title}
+                      </h4>
+                      <p className="text-gray-600 leading-relaxed text-base sm:text-lg">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -557,12 +573,6 @@ export const AboutPage = ({ language }: AboutPageProps) => {
       {/* Video Section with Controls */}
       <section className="py-32 bg-white">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold text-black tracking-tight">
-              {language === 'en' ? 'See It in Action' : language === 'es' ? 'Véalo en Acción' : 'Veja em Ação'}
-            </h2>
-          </div>
-          
           <div 
             className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-gray-200"
             onMouseEnter={() => setShowControls(true)}
