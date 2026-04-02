@@ -40,17 +40,17 @@ export const CTASection = ({ language }: CTASectionProps) => {
       <div ref={contentRef} className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
         <h2 className="text-6xl sm:text-7xl md:text-8xl font-bold text-black mb-10 tracking-tight">
           {language === 'en'
-            ? 'Ready to transform your welding operations?'
+            ? 'Hitting production limits?'
             : language === 'es'
-            ? '¿Listo para transformar sus operaciones de soldadura?'
-            : 'Pronto para transformar suas operações de soldagem?'}
+            ? '¿Alcanzando los límites de producción?'
+            : 'Atingindo limites de produção?'}
         </h2>
         <p className="text-2xl sm:text-3xl text-gray-600 max-w-4xl mx-auto mb-16 font-light leading-relaxed">
           {language === 'en'
-            ? 'Contact our team to learn how our AI welding robots can revolutionize your manufacturing process'
+            ? "More labor doesn't guarantee more output. Scale efficiently with automation designed for high-performance welding."
             : language === 'es'
-            ? 'Contacte a nuestro equipo para descubrir cómo nuestros robots de soldadura con IA pueden revolucionar su proceso de fabricación'
-            : 'Entre em contato com nossa equipe para descobrir como nossos robôs de soldagem com IA podem revolucionar seu processo de fabricação'}
+            ? "Más mano de obra no garantiza mayor producción. Escale eficientemente con automatización diseñada para soldadura de alto rendimiento."
+            : "Mais mão de obra não garante mais produção. Escale eficientemente com automação projetada para soldagem de alto desempenho."}
         </p>
         <div className="flex flex-col sm:flex-row gap-5 justify-center">
           <a
