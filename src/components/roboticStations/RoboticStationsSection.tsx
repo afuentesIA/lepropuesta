@@ -21,8 +21,8 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
     {
       id: 'track-type',
       name: language === 'en' ? 'Track Type' : language === 'es' ? 'Tipo Pista' : 'Tipo Pista',
-      model: 'TrackWeld Station',
-      specs: '7 Axis',
+      model: 'TrackWeld Station',a
+      specs: '7 Axis Control',
       description: language === 'en'
         ? 'Precision track-based welding station with servo axis control for consistent, high-quality welds on long structures and assemblies.'
         : language === 'es'
@@ -84,9 +84,9 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
         : 'Sistema de pórtico de serviço pesado com capacidade de soldagem dupla para projetos industriais de grande escala que requerem máxima cobertura e produtividade.',
       image: './img/gantry.png',
       features: [
-        { icon: <Move3d className="w-5 h-5" />, label: language === 'en' ? 'Dual Welding' : language === 'es' ? 'Soldadura Dual' : 'Soldagem Dupla' },
-        { icon: <Zap className="w-5 h-5" />, label: language === 'en' ? 'Heavy Duty' : language === 'es' ? 'Servicio Pesado' : 'Serviço Pesado' },
-        { icon: <Shield className="w-5 h-5" />, label: language === 'en' ? 'Max Coverage' : language === 'es' ? 'Máxima Cobertura' : 'Cobertura Máxima' }
+        { icon: <Move3d className="w-5 h-5" />, label: language === 'en' ? 'Gantry Rail' : language === 'es' ? 'Pórtico Sobre Rieles' : 'Pórtico Sobre Trilhos' },
+        { icon: <Zap className="w-5 h-5" />, label: language === 'en' ? 'Dual / Single Robot' : language === 'es' ? 'Robot Dual / Simple' : 'Robô Duplo / Simples' },
+        { icon: <Shield className="w-5 h-5" />, label: language === 'en' ? 'Cutting or Welding Capabilities' : language === 'es' ? 'Capacidades de Corte o Soldadura' : 'Capacidades de Corte ou Soldagem' }
       ],
       longDescription: language === 'en'
         ? 'The GantryRail DualWeld system sets new standards for large-scale welding productivity. With dual welding heads and massive coverage area, it\'s the ultimate solution for shipbuilding, bridge construction, and heavy industry.'
