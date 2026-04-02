@@ -87,12 +87,6 @@ export const Navigation = ({ language, onLanguageChange }: NavigationProps) => {
       nativeName: 'Español',
       flag: 'https://flagcdn.com/w40/mx.png'
     },
-    { 
-      code: 'pt', 
-      name: 'Portuguese', 
-      nativeName: 'Português',
-      flag: 'https://flagcdn.com/w40/br.png'
-    },
   ];
 
   // Opciones principales de navegación
