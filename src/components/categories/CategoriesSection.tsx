@@ -87,8 +87,8 @@ export const CategoriesSection = ({ language, activeCategory, onCategorySelect }
       images: [
         '/img/cell1.png',
         '/img/cell2.png',
-        '/img/cell3.png',
-        '/img/cell4.png'
+        '/img/cell7.png',
+        '/img/cell5.png'
       ]
     }
   ];
