@@ -1,6 +1,6 @@
 // types/category.types.ts
 export interface Category {
-  id: 'mobile-welding' | 'robotic-stations' | 'custom-cells';
+  id: 'mobile-welding' | 'jasper-x' | 'robotic-stations' | 'custom-cells';
   title: {
     en: string;
     es: string;
