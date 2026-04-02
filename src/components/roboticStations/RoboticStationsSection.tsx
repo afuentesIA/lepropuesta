@@ -22,7 +22,7 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
       id: 'track-type',
       name: language === 'en' ? 'Track Type' : language === 'es' ? 'Tipo Pista' : 'Tipo Pista',
       model: 'TrackWeld Station',
-      specs: 'ServoAxis',
+      specs: '7 Axis',
       description: language === 'en'
         ? 'Precision track-based welding station with servo axis control for consistent, high-quality welds on long structures and assemblies.'
         : language === 'es'
@@ -252,12 +252,6 @@ export const RoboticStationsSection = ({ language }: RoboticStationsSectionProps
                       <div className="flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-xl rounded-full border border-stone-200 shadow-sm">
                         <Cpu className="w-4 h-4 text-red-600" />
                         <span className="text-stone-700 text-sm font-medium">{station.specs}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="absolute bottom-6 right-6">
-                      <div className="px-4 py-2 bg-red-600 rounded-full shadow-lg shadow-red-500/30">
-                        <span className="text-white text-sm font-semibold">{station.model}</span>
                       </div>
                     </div>
                   </div>
