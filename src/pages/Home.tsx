@@ -17,7 +17,7 @@ interface HomeProps {
 export const Home = ({ language, onLanguageChange }: HomeProps) => {
   const t = translations[language];
   const heroRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
@@ -25,10 +25,22 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
   const noProgrammingRef = useRef<HTMLDivElement>(null);
   const [fpsCount, setFpsCount] = useState(0);
   const [precisionCount, setPrecisionCount] = useState(0);
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+
+  // Precargar la imagen del hero
+  useEffect(() => {
+    const img = new Image();
+    img.src = './img/HeroHome.png';
+    img.onload = () => setHeroImageLoaded(true);
+    img.onerror = () => {
+      console.log('Error loading hero image');
+      setHeroImageLoaded(true);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.to(videoRef.current, {
+      gsap.to(imageRef.current, {
         scrollTrigger: {
           trigger: heroRef.current,
           start: 'top top',
@@ -151,7 +163,6 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
           duration: 1,
         });
 
-        // ANIMACIÓN MEJORADA - MÁS RÁPIDA PARA LOS RECUADROS DE ESTADÍSTICAS
         gsap.utils.toArray(visionRef.current.querySelectorAll('.vision-stat-card')).forEach((card, index) => {
           gsap.from(card as Element, {
             scrollTrigger: {
@@ -336,20 +347,11 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       title: language === 'en' ? 'Automated Welding' : language === 'es' ? 'Soldadura Automatizada' : 'Soldagem Automatizada',
       description:
         language === 'en'
-          ? 'Robotic welds for fabrication shops across the Americas'
+          ? 'Solutions for fabrication shops across the Americas'
           : language === 'es'
-          ? 'Soldaduras robóticas para talleres de fabricación en las Américas'
+          ? 'Soluciones para talleres de fabricación en las Américas'
           : 'Soldas robóticas para oficinas de fabricação nas Américas',
-    },
-    {
-      title: language === 'en' ? 'Assembly Systems' : language === 'es' ? 'Sistemas de Ensamblaje' : 'Sistemas de Montagem',
-      description:
-        language === 'en'
-          ? 'Modular solutions for oilfield and construction applications'
-          : language === 'es'
-          ? 'Soluciones modulares para aplicaciones petroleras y de construcción'
-          : 'Soluções modulares para aplicações de petróleo e construção',
-    },
+    }
   ];
 
   const countries = [
@@ -373,24 +375,26 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden bg-black">
         <div className="absolute inset-0 h-screen w-full overflow-hidden">
-          <div ref={videoRef} className="absolute inset-0 w-full h-full">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src="./vid/hero2.mp4" type="video/mp4" />
-            </video>
+          <div ref={imageRef} className="absolute inset-0 w-full h-full">
+            <img
+              src="./img/HeroHome.png"
+              alt="Hero Background"
+              className={`w-full h-full object-cover transition-opacity duration-500 ${
+                heroImageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{
+                objectPosition: 'center 80%',
+              }}
+              onLoad={() => setHeroImageLoaded(true)}
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
           </div>
 
           <div ref={textRef} className="relative z-10 h-full flex items-center">
             <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full">
-              <div className="max-w-4xl">
+              <div className="max-w-4xl md:mt-0 mt-32">
                 <div className="overflow-hidden mb-6">
-                  <h1 className="hero-text-line text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tighter leading-[0.9]">
+                  <h1 className="hero-text-line text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tighter leading-[1.1] pb-4">
                     {language === 'en'
                       ? 'Intelligent Robotic Welding'
                       : language === 'es'
@@ -410,10 +414,10 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                 <div className="overflow-hidden mb-12">
                   <p className="hero-text-line text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed font-light max-w-2xl">
                     {language === 'en'
-                      ? 'AI-powered welding solutions trusted across Canada, USA, Mexico, and Brazil'
+                      ? 'AI-powered welding solutions trusted across Canada, USA and Mexico'
                       : language === 'es'
-                      ? 'Soluciones de soldadura con IA probadas en Canadá, USA, México y Brasil'
-                      : 'Soluções de soldagem com IA comprovadas no Canadá, EUA, México e Brasil'}
+                      ? 'Soluciones de soldadura con IA probadas en Canadá, USA y México'
+                      : 'Soluções de soldagem com IA comprovadas no Canadá, EUA e México'}
                   </p>
                 </div>
                 <div className="hero-cta flex flex-col sm:flex-row gap-5 pt-4">
@@ -450,12 +454,12 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       </section>
 
       {/* Features Section - White Background */}
-      <section ref={featuresRef} className="py-40 bg-white relative">
+      <section ref={featuresRef} className="py-32 bg-white relative">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <div className="inline-block mb-6">
             </div>
-            <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tight text-black">
+            <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 tracking-tight text-black">
               {language === 'en'
                 ? 'Why LE Robotics'
                 : language === 'es'
@@ -489,7 +493,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       </section>
 
       {/* Vision System Section - White Background */}
-      <section ref={visionRef} className="py-32 bg-white relative overflow-hidden">
+      <section ref={visionRef} className="py-28 bg-white relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-50/50 rounded-full blur-[128px]" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-50/50 rounded-full blur-[128px]" />
@@ -506,7 +510,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
               <div className="vision-title">
                 <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.25]">
                   <span className="text-black">Vision System</span>
-                  <span className="block text-red-600 mt-8 pb-3">
+                  <span className="block text-red-600 mt-6 pb-3">
                     {language === 'en' ? '& AI Technology' : language === 'es' ? 'y Tecnología IA' : 'e Tecnologia IA'}
                   </span>
                 </h2>
@@ -571,7 +575,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       </section>
 
       {/* No Programming Section - White Background with subtle red accents */}
-      <section ref={noProgrammingRef} className="py-32 bg-white relative overflow-hidden">
+      <section ref={noProgrammingRef} className="py-28 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50" />
 
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative">
@@ -587,7 +591,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                   <span className="text-black">
                     {language === 'en' ? 'Start Production' : language === 'es' ? 'Comienza la Producción' : 'Inicie a Produção'}
                   </span>
-                  <span className="block text-red-600 mt-8 pb-3">
+                  <span className="block text-red-600 mt-6 pb-3">
                     {language === 'en' ? 'From Day One' : language === 'es' ? 'Desde el Primer Día' : 'Desde o Primeiro Dia'}
                   </span>
                 </h2>
@@ -687,18 +691,21 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       </section>
 
       {/* Real-World Proven Solutions Section - White Background */}
-      <section className="py-40 bg-white relative overflow-hidden">
+      <section className="py-32 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-red-50" />
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative">
-          <div className="text-center mb-32">
+          <div className="text-center mb-16">
             <div className="inline-block mb-6">
             </div>
             <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight">
               <span className="text-black">
                 {language === 'en' ? 'Real-World Proven' : language === 'es' ? 'Soluciones Probadas en el' : 'Soluções Comprovadas no'}
               </span>
-              <span className="block text-red-600 mt-4">
-                {language === 'en' ? 'Solutions' : language === 'es' ? 'Mundo Real' : 'Mundo Real'}
+              <span className="text-red-600">
+                {' '}{language === 'en' ? 'Solutions' : language === 'es' ? 'Mundo Real' : 'Mundo Real'}
+              </span>
+              <span className="text-red-600">
+                {' '}{language === 'en' ? 'with Real-World Partners' : language === 'es' ? 'con Socios Reales' : 'com Parceiros Reais'}
               </span>
             </h2>
             <p className="text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto font-light mt-6">
@@ -708,11 +715,29 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                 ? 'Implementado en petróleo y gas, manufactura e industria pesada'
                 : 'Implementado em petróleo e gás, manufatura e indústria pesada'}
             </p>
+            
+            {/* Logos Section */}
+            <div className="flex justify-center items-center gap-16 mt-12">
+              <div className="w-48 sm:w-56 h-auto">
+                <img
+                  src="./img/Yaskawa.webp"
+                  alt="Yaskawa"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="w-48 sm:w-56 h-auto">
+                <img
+                  src="./img/otc.png"
+                  alt="OTC"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-32">
+          <div className="space-y-24">
             <div className="product-preview grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <div className="inline-block">
                   <span className="text-red-600 text-sm font-bold tracking-wider uppercase px-4 py-2 bg-red-50 rounded-full border border-red-200">
                     {language === 'en' ? 'Oil & Gas' : language === 'es' ? 'Petróleo y Gas' : 'Petróleo e Gás'}
@@ -720,18 +745,18 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                 </div>
                 <h3 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none">
                   <span className="text-black">
-                    {language === 'en' ? 'Pipeline & Pressure' : language === 'es' ? 'Tuberías y' : 'Tubulações e'}
+                    {language === 'en' ? 'Pressure Pipe and' : language === 'es' ? 'Tuberías a Presión y' : 'Tubulações de Pressão e'}
                   </span>
-                  <span className="block text-red-600 mt-4">
-                    {language === 'en' ? 'Vessels' : language === 'es' ? 'Recipientes a Presión' : 'Recipientes Pressurizados'}
+                  <span className="block text-red-600 mt-2">
+                    {language === 'en' ? 'Pressure Equipment' : language === 'es' ? 'Equipos a Presión' : 'Equipamentos de Pressão'}
                   </span>
                 </h3>
                 <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed font-light">
                   {language === 'en'
-                    ? 'Precision pipeline welding with certified quality. Designed for harsh field conditions and maximum uptime'
+                    ? 'Precision welding with certified quality. Designed for consistency and repeatability'
                     : language === 'es'
-                    ? 'Soldadura de tuberías de precisión con calidad certificada. Diseñada para condiciones difíciles y máxima disponibilidad'
-                    : 'Soldagem de tubulação de precisão com qualidade certificada. Projetada para condições severas e máximo tempo de operação'}
+                    ? 'Soldadura de precisión con calidad certificada. Diseñada para consistencia y repetibilidad'
+                    : 'Soldagem de precisão com qualidade certificada. Projetada para consistência e repetibilidade'}
                 </p>
                 <div className="space-y-4 pt-4">
                   {applications.map((app, index) => (
@@ -753,19 +778,19 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
             </div>
 
             <div className="product-preview grid lg:grid-cols-2 gap-16 items-center">
-              <div className="lg:order-2 space-y-8">
+              <div className="lg:order-2 space-y-6">
                 <div className="inline-block">
                   <span className="text-red-600 text-sm font-bold tracking-wider uppercase px-4 py-2 bg-red-50 rounded-full border border-red-200">
                     {language === 'en' ? 'Heavy Manufacturing' : language === 'es' ? 'Manufactura Pesada' : 'Manufatura Pesada'}
                   </span>
                 </div>
                 <h3 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-none">
-                  <span className="text-black">
-                    {language === 'en' ? 'Automotive &' : language === 'es' ? 'Automotriz y' : 'Automotivo e'}
-                  </span>
-                  <span className="block text-red-600 mt-4">
-                    {language === 'en' ? 'Fabrication' : language === 'es' ? 'Fabricación' : 'Fabricação'}
-                  </span>
+                 <span className="text-black">
+                   {language === 'en' ? 'Advanced Manufacturing' : language === 'es' ? 'Manufactura Avanzada' : 'Manufatura Avançada'}
+                 </span>
+                 <span className="block text-red-600 mt-2">
+                   {language === 'en' ? 'Automation' : language === 'es' ? 'Automatización' : 'Automação'}
+                 </span>
                 </h3>
                 <p className="text-xl sm:text-2xl text-gray-600 leading-relaxed font-light">
                   {language === 'en'
@@ -793,7 +818,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
             </div>
           </div>
 
-          <div className="mt-32 text-center">
+          <div className="mt-24 text-center">
             <Link
               to="/contact"
               className="inline-flex items-center justify-center gap-3 px-12 py-6 bg-gradient-to-r from-red-600 to-red-500 text-white text-xl font-semibold rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-500 hover:scale-105 hover:shadow-[0_30px_80px_rgba(220,38,38,0.4)] group"
@@ -812,15 +837,15 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
       </section>
 
       {/* Contact Section */}
-      <section ref={contactRef} className="py-40 bg-gray-50 relative overflow-hidden">
+      <section ref={contactRef} className="py-32 bg-gray-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-20">
-            <div className="inline-block mb-6">
+          <div className="text-center mb-16">
+            <div className="inline-block mb-4">
               <span className="text-red-600 text-xl font-semibold tracking-wide uppercase px-6 py-2 border border-red-200 rounded-full bg-red-50">
                 {language === 'en' ? 'Get In Touch' : language === 'es' ? 'Contáctanos' : 'Entre em Contato'}
               </span>
             </div>
-            <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tight">
+            <h2 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 tracking-tight">
               <span className="text-black">
                 {language === 'en' ? "Let's Build Your" : language === 'es' ? 'Construyamos tu' : 'Vamos Construir sua'}
               </span>
@@ -844,7 +869,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                   {language === 'en' ? 'Global Offices' : language === 'es' ? 'Oficinas Globales' : 'Escritórios Globais'}
                 </h3>
                 
-                <div className="space-y-8">
+                <div className="space-y-6">
                   <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center">
@@ -861,29 +886,6 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                         <div className="flex items-center gap-2 text-red-600 font-medium">
                           <Phone className="w-4 h-4" />
                           <span>+1 403-860-5275</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-700 rounded-2xl flex items-center justify-center">
-                        <Mail className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-semibold text-black mb-3">
-                          {language === 'en' ? 'International Email' : language === 'es' ? 'Correo Internacional' : 'E-mail Internacional'}
-                        </h4>
-                        <p className="text-gray-600 leading-relaxed mb-3">
-                          {language === 'en' 
-                            ? 'Available in English, Spanish, and Portuguese' 
-                            : language === 'es' 
-                            ? 'Disponible en inglés, español y portugués' 
-                            : 'Disponível em inglês, espanhol e português'}
-                        </p>
-                        <div className="text-red-600 font-medium">
-                          info@lerobotics.ai
                         </div>
                       </div>
                     </div>
@@ -911,18 +913,29 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                             </h5>
                             <p className="text-gray-600 text-sm">34370 Sunset Ln, Brookshire, TX 77423</p>
                           </div>
-                          <div>
-                            <h5 className="font-semibold text-black mb-1">
-                              {language === 'en' ? 'Brazil' : language === 'es' ? 'Brasil' : 'Brasil'}
-                            </h5>
-                            <p className="text-gray-600 text-sm">
-                              {language === 'en' 
-                                ? 'São Paulo Office (Coming Soon)' 
-                                : language === 'es' 
-                                ? 'Oficina São Paulo (Próximamente)' 
-                                : 'Escritório São Paulo (Em Breve)'}
-                            </p>
-                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-700 rounded-2xl flex items-center justify-center">
+                        <Mail className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-semibold text-black mb-3">
+                          {language === 'en' ? 'International Email' : language === 'es' ? 'Correo Internacional' : 'E-mail Internacional'}
+                        </h4>
+                        <p className="text-gray-600 leading-relaxed mb-3">
+                          {language === 'en' 
+                            ? 'Available in English, Spanish, and Portuguese' 
+                            : language === 'es' 
+                            ? 'Disponible en inglés, español y portugués' 
+                            : 'Disponível em inglês, espanhol e português'}
+                        </p>
+                        <div className="text-red-600 font-medium">
+                          info@lerobotics.ai
                         </div>
                       </div>
                     </div>
@@ -933,7 +946,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
 
             <div className="contact-item">
               <div className="bg-white rounded-[2.5rem] p-12 shadow-sm border border-gray-100">
-                <form className="space-y-8">
+                <form className="space-y-6">
                   <div>
                     <label className="block text-lg font-medium text-black mb-4">
                       {language === 'en' ? 'Your Country' : language === 'es' ? 'Tu País' : 'Seu País'}
@@ -1007,7 +1020,7 @@ export const Home = ({ language, onLanguageChange }: HomeProps) => {
                         : language === 'es' 
                         ? 'Cuéntanos sobre tus necesidades de automatización de soldadura...' 
                         : 'Conte-nos sobre suas necessidades de automação de soldagem...'}
-                      rows={5}
+                      rows={4}
                       className="w-full px-6 py-5 bg-gray-50 border-0 rounded-2xl text-lg text-black placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:bg-white transition-all duration-200 resize-none"
                     />
                   </div>
