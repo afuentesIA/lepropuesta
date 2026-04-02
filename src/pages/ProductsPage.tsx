@@ -11,6 +11,7 @@ import { CTASection } from '../components/CTASection';
 import { MobileWeldingSection } from '../components/mobileWelding/MobileWeldingSection';
 import { RoboticStationsSection } from '../components/roboticStations/RoboticStationsSection';
 import { CustomCellsSection } from '../components/customCells/CustomCellsSection';
+import { JasperXSection } from '../components/cutterSeries/JasperXSection';
 import { Footer } from '../components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -259,6 +260,7 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
     return (
       <div className="transition-opacity duration-500">
         {activeCategory === 'mobile-welding' && <MobileWeldingSection language={language} />}
+        {activeCategory === 'jasper-x' && <JasperXSection language={language} />}
         {activeCategory === 'robotic-stations' && <RoboticStationsSection language={language} />}
         {activeCategory === 'custom-cells' && <CustomCellsSection language={language} />}
       </div>
@@ -303,10 +305,10 @@ export const ProductsPage = ({ language }: ProductsPageProps) => {
               </h1>
               <p className="text-2xl sm:text-3xl md:text-4xl text-white/90 leading-relaxed font-light max-w-4xl mx-auto mb-16">
                 {language === 'en'
-                  ? 'AI-powered welding robots for industrial automation. Serving Canada, United States, Mexico and Brazil.'
+                  ? 'AI-powered welding solutions that reduce programming time and accelerate industrial automation.'
                   : language === 'es'
-                  ? 'Robots de soldadura con IA para automatización industrial. Sirviendo a Canadá, Estados Unidos, México y Brasil.'
-                  : 'Robôs de soldagem com IA para automação industrial. Atendendo Canadá, Estados Unidos, México e Brasil.'}
+                  ? 'Soluciones de soldadura con IA que reducen el tiempo de programación y aceleran la automatización industrial.'
+                  : 'Soluções de soldagem com IA que reduzem o tempo de programação e aceleram a automação industrial.'}
               </p>
               <a
                 href="#categories"
