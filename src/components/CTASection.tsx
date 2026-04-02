@@ -35,6 +35,14 @@ export const CTASection = ({ language }: CTASectionProps) => {
     return () => ctx.revert();
   }, []);
 
+  // Función para manejar el clic del botón ROI
+  const handleROIClick = () => {
+    // Aquí puedes agregar la lógica que necesites
+    // Por ejemplo: abrir un modal, mostrar una calculadora, etc.
+    console.log('ROI Calculation clicked');
+    // Ejemplo: alert('ROI Calculator coming soon!');
+  };
+
   return (
     <section ref={sectionRef} className="py-20 bg-white">
       <div ref={contentRef} className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
@@ -62,6 +70,17 @@ export const CTASection = ({ language }: CTASectionProps) => {
             </span>
             <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
           </a>
+          {/* Nuevo botón ROI Calculation */}
+          <button
+            onClick={handleROIClick}
+            className="inline-flex items-center justify-center px-12 py-6 border-2 border-gray-300 text-gray-700 text-xl font-semibold rounded-full hover:bg-gray-100 hover:border-gray-400 transition-all duration-500 hover:scale-105"
+          >
+            {language === 'en' 
+              ? 'ROI Calculation' 
+              : language === 'es' 
+              ? 'Cálculo de ROI' 
+              : 'Cálculo de ROI'}
+          </button>
           <a
             href="/about"
             className="inline-flex items-center justify-center px-12 py-6 border-2 border-black text-black text-xl font-semibold rounded-full hover:bg-black hover:text-white transition-all duration-500 hover:scale-105"
